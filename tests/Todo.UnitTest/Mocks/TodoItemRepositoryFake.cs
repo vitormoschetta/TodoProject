@@ -20,7 +20,13 @@ namespace Todo.UnitTest.Mocks
                 new TodoItem
                 {
                     Id = 1,
-                    Title = "First TodoItem",
+                    Title = "First Task",
+                    Done = false
+                },
+                new TodoItem
+                {
+                    Id = 1,
+                    Title = "Second Task",
                     Done = false
                 }
             };
@@ -119,6 +125,16 @@ namespace Todo.UnitTest.Mocks
             {
                 _source.Remove(todoItem);
                 _source.Add(item);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public Task UpdateAllToDone()
+        {
+            foreach (var item in _source)
+            {
+                item.Done = true;                
             }
 
             return Task.CompletedTask;

@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Todo.Domain.Commands.CreateCommands;
 using Todo.Domain.Commands.DeleteCommands;
@@ -42,7 +43,7 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
         public async Task When_Create_TodoItem_Empty_Returns_Unsuccessfully()
         {
             // Arrange
-            var command = new TodoItemCreateCommand();            
+            var command = new TodoItemCreateCommand();
 
             // Act
             var response = await handler.Handle(command);
@@ -60,7 +61,25 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
             {
                 Title = "Todo", // requires at least five characters
                 Done = false
-            };          
+            };
+
+            // Act
+            var response = await handler.Handle(command);
+
+            // Assert
+            Assert.False(response.Success, response.Message);
+            Assert.Equal(EOutputType.BusinessValidation, response.OutputType);
+        }
+
+        [Fact]
+        public async Task When_Create_TodoItem_With_Title_That_Already_Exists_Returns_Unsuccessfully()
+        {
+            // Arrange
+            var command = new TodoItemCreateCommand()
+            {
+                Title = "First Task", // title already exists in repository Fake
+                Done = false
+            };
 
             // Act
             var response = await handler.Handle(command);
@@ -108,7 +127,7 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
         public async Task When_trying_to_delete_any_emptyItem_it_returns_without_success()
         {
             // Arrange
-            var command = new TodoItemDeleteCommand();           
+            var command = new TodoItemDeleteCommand();
 
             // Act
             var response = await handler.Handle(command);
@@ -116,6 +135,23 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
             // Assert
             Assert.False(response.Success, response.Message);
             Assert.Equal(EOutputType.BusinessValidation, response.OutputType);
-        }        
+        }
+
+        [Fact]
+        public async Task When_updating_all_tasks_to_Done()
+        {
+            // Arrange
+            var isThereTaskNotDone = repository.Query().Where(x => x.Done == false).Any();
+
+            // Act
+            await handler.UpdateAllToDone();
+
+            // Assert
+            // Como testar um método sem saída/retorno? Verificando seus efeitos colaterais (side effects)
+            // Primeiro verificamos se existe pelo menos uma task não concluída (Done == false)
+            // Após a execução do Handler, verificamos que NÃO existe nenhuma task com status de não concluída (Done == true)
+            Assert.True(isThereTaskNotDone, "Para um teste eficaz é necessário que exista pelo menos uma tarefa não concluída (Done == false) no repositório Fake");
+            Assert.False(repository.Query().Where(x => x.Done == false).Any(), "Todos os itens devem ser atualizados para o status de concluído (Done)");
+        }
     }
 }

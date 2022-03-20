@@ -9,7 +9,8 @@ namespace Todo.Domain.Contracts.Commands.Handlers
     public interface ITodoItemCommandHandler
     {
         Task<GenericResponse> Handle(TodoItemCreateCommand command);
-        Task<GenericResponse> Handle(TodoItemUpdateCommand command);        
-        Task<GenericResponse> Handle(TodoItemDeleteCommand command);        
+        Task<GenericResponse> Handle(TodoItemUpdateCommand command);
+        Task<GenericResponse> Handle(TodoItemDeleteCommand command);
+        Task UpdateAllToDone();
     }
 }

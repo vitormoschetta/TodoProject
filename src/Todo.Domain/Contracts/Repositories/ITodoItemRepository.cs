@@ -16,6 +16,7 @@ namespace Todo.Domain.Contracts.Repositories
         Task UpdateRange(IEnumerable<TodoItem> items);
         Task Delete(TodoItem item);
         Task Delete(int id);
+        Task UpdateAllToDone();
         Task<IEnumerable<TodoItem>> GetAll();
         Task<IEnumerable<TodoItem>> GetMany(Expression<Func<TodoItem, bool>> predicate);
         Task<TodoItem> GetById(int id);

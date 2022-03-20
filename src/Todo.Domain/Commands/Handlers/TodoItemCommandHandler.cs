@@ -114,5 +114,17 @@ namespace Todo.Domain.Commands.Handlers
                 return new GenericResponse(ex);
             }
         }
+
+        public async Task UpdateAllToDone()
+        {
+            try
+            {
+                await _uow.TodoItem.UpdateAllToDone();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }            
+        }
     }
 }
