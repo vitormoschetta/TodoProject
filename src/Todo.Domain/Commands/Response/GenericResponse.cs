@@ -5,8 +5,6 @@ namespace Todo.Domain.Commands.Response
 {
     public class GenericResponse
     {
-        public GenericResponse() { }
-
         public GenericResponse(string message, object data = null)
         {
             Message = message;

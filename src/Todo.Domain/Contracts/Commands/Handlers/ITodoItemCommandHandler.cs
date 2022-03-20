@@ -11,6 +11,7 @@ namespace Todo.Domain.Contracts.Commands.Handlers
         Task<GenericResponse> Handle(TodoItemCreateCommand command);
         Task<GenericResponse> Handle(TodoItemUpdateCommand command);
         Task<GenericResponse> Handle(TodoItemDeleteCommand command);
+        Task<GenericResponse> Handle(TodoItemMarkAsDoneCommand command);
         Task UpdateAllToDone();
     }
 }

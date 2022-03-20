@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Todo.Domain.Commands.CreateCommands;
 using Todo.Domain.Commands.DeleteCommands;
 using Todo.Domain.Commands.Handlers;
+using Todo.Domain.Commands.UpdateCommands;
 using Todo.Domain.Enums;
 using Todo.UnitTest.Mocks;
 using Xunit;
@@ -14,6 +15,10 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
         private readonly TodoItemRepositoryFake repository;
         private readonly UnitOfWorkFake uow;
         private readonly TodoItemCommandHandler handler;
+        private TodoItemCreateCommand createCommandNotInstantiated;
+        private TodoItemDeleteCommand deleteCommandNotInstantiated;
+        private TodoItemUpdateCommand updateCommandNotInstantiated;
+        private TodoItemMarkAsDoneCommand markAsDoneCommandNotInstantiated;
 
         public TodoItemCommandHandlerTest()
         {
@@ -37,6 +42,19 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
 
             // Assert
             Assert.True(response.Success, response.Message);
+        }
+
+        [Fact]
+        public async Task When_Create_TodoItem_With_Not_Instance_CreateCommand_Returns_Unsuccessfully()
+        {
+            // Arrange            
+
+            // Act
+            var response = await handler.Handle(createCommandNotInstantiated);
+
+            // Assert
+            Assert.False(response.Success, response.Message);
+            Assert.Equal(EOutputType.Failure, response.OutputType);
         }
 
         [Fact]
@@ -107,6 +125,19 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
         }
 
         [Fact]
+        public async Task When_trying_to_delete_TodoItem_With_Not_Instance_DeleteCommand_Returns_Unsuccessfully()
+        {
+            // Arrange            
+
+            // Act
+            var response = await handler.Handle(deleteCommandNotInstantiated);
+
+            // Assert
+            Assert.False(response.Success, response.Message);
+            Assert.Equal(EOutputType.Failure, response.OutputType);
+        }
+
+        [Fact]
         public async Task When_trying_to_delete_todoItem_with_non_existent_ID_returns_unsuccessful()
         {
             // Arrange
@@ -138,6 +169,132 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
         }
 
         [Fact]
+        public async Task When_Updating_Valid_TodoItem_Returns_Success()
+        {
+            // Arrange
+            var command = new TodoItemUpdateCommand()
+            {
+                Id = 1,
+                Title = "new tilte",
+                Done = false
+            };
+
+            // Act
+            var response = await handler.Handle(command);
+
+            // Assert
+            Assert.True(response.Success, response.Message);
+            Assert.Equal(EOutputType.Success, response.OutputType);
+        }
+
+        [Fact]
+        public async Task When_trying_to_update_TodoItem_With_Not_Instance_UpdateCommand_Returns_Unsuccessfully()
+        {
+            // Arrange            
+
+            // Act
+            var response = await handler.Handle(updateCommandNotInstantiated);
+
+            // Assert
+            Assert.False(response.Success, response.Message);
+            Assert.Equal(EOutputType.Failure, response.OutputType);
+        }
+
+        [Fact]
+        public async Task When_trying_to_update_todoItem_with_non_existent_ID_returns_unsuccessful()
+        {
+            // Arrange
+            var command = new TodoItemUpdateCommand()
+            {
+                Id = 99,
+                Title = "new title",
+                Done = false
+            };
+
+            // Act
+            var response = await handler.Handle(command);
+
+            // Assert
+            Assert.False(response.Success, response.Message);
+            Assert.Equal(EOutputType.NotFound, response.OutputType);
+        }
+
+        [Fact]
+        public async Task When_trying_to_update_any_emptyItem_it_returns_without_success()
+        {
+            // Arrange
+            var command = new TodoItemUpdateCommand();
+
+            // Act
+            var response = await handler.Handle(command);
+
+            // Assert
+            Assert.False(response.Success, response.Message);
+            Assert.Equal(EOutputType.BusinessValidation, response.OutputType);
+        }
+
+        [Fact]
+        public async Task When_MarkAsDone_Valid_TodoItem_Returns_Success()
+        {
+            // Arrange
+            var command = new TodoItemMarkAsDoneCommand()
+            {
+                Id = 1,              
+            };
+
+            // Act
+            var response = await handler.Handle(command);
+
+            // Assert
+            Assert.True(response.Success, response.Message);
+            Assert.Equal(EOutputType.Success, response.OutputType);
+        }
+
+        [Fact]
+        public async Task When_trying_to_MarkAdDone_TodoItem_With_Not_Instance_UpdateCommand_Returns_Unsuccessfully()
+        {
+            // Arrange            
+
+            // Act
+            var response = await handler.Handle(markAsDoneCommandNotInstantiated);
+
+            // Assert
+            Assert.False(response.Success, response.Message);
+            Assert.Equal(EOutputType.Failure, response.OutputType);
+        }
+
+        [Fact]
+        public async Task When_trying_to_MarkAdDone_todoItem_with_non_existent_ID_returns_unsuccessful()
+        {
+            // Arrange
+            var command = new TodoItemMarkAsDoneCommand()
+            {
+                Id = 99              
+            };
+
+            // Act
+            var response = await handler.Handle(command);
+
+            // Assert
+            Assert.False(response.Success, response.Message);
+            Assert.Equal(EOutputType.NotFound, response.OutputType);
+        }
+
+        [Fact]
+        public async Task When_trying_to_MarkAsDone_any_emptyItem_it_returns_without_success()
+        {
+            // Arrange
+            var command = new TodoItemMarkAsDoneCommand();
+
+            // Act
+            var response = await handler.Handle(command);
+
+            // Assert
+            Assert.False(response.Success, response.Message);
+            Assert.Equal(EOutputType.BusinessValidation, response.OutputType);
+        }
+
+        [Fact]
         public async Task When_updating_all_tasks_to_Done()
         {
             // Arrange
@@ -152,6 +309,6 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
             // Após a execução do Handler, verificamos que NÃO existe nenhuma task com status de não concluída (Done == true)
             Assert.True(isThereTaskNotDone, "Para um teste eficaz é necessário que exista pelo menos uma tarefa não concluída (Done == false) no repositório Fake");
             Assert.False(repository.Query().Where(x => x.Done == false).Any(), "Todos os itens devem ser atualizados para o status de concluído (Done)");
-        }
+        }       
     }
 }

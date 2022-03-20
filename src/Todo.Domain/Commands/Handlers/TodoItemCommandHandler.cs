@@ -68,10 +68,10 @@ namespace Todo.Domain.Commands.Handlers
 
                 if (todoItem is null)
                 {
-                    return new GenericResponse("TodoItem not found", EOutputType.NotFound);                    
+                    return new GenericResponse("TodoItem not found", EOutputType.NotFound);
                 }
 
-                todoItem.Update(command.Title, command.Done);                
+                todoItem.Update(command.Title, command.Done);
 
                 await _uow.TodoItem.Update(todoItem);
                 await _uow.Commit();
@@ -99,7 +99,7 @@ namespace Todo.Domain.Commands.Handlers
 
                 if (todoItem is null)
                 {
-                    return new GenericResponse("TodoItem not found", EOutputType.NotFound);                    
+                    return new GenericResponse("TodoItem not found", EOutputType.NotFound);
                 }
 
                 await _uow.TodoItem.Delete(todoItem);
@@ -108,6 +108,37 @@ namespace Todo.Domain.Commands.Handlers
                 return new GenericResponse("Deleted!");
 
 
+            }
+            catch (Exception ex)
+            {
+                return new GenericResponse(ex);
+            }
+        }
+
+        public async Task<GenericResponse> Handle(TodoItemMarkAsDoneCommand command)
+        {
+            try
+            {
+                var validationCommand = command.Validate();
+
+                if (validationCommand.IsValid == false)
+                {
+                    return new GenericResponse(string.Join("; ", validationCommand.Errors), EOutputType.BusinessValidation);
+                }
+
+                var todoItem = await _uow.TodoItem.GetById(command.Id);
+
+                if (todoItem is null)
+                {
+                    return new GenericResponse("TodoItem not found", EOutputType.NotFound);
+                }
+
+                todoItem.MarkAsDone();
+
+                await _uow.TodoItem.Update(todoItem);
+                await _uow.Commit();
+
+                return new GenericResponse("Mark as Done!");
             }
             catch (Exception ex)
             {
@@ -124,7 +155,7 @@ namespace Todo.Domain.Commands.Handlers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-            }            
+            }
         }
     }
 }
