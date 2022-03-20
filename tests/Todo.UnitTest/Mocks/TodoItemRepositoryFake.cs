@@ -15,7 +15,15 @@ namespace Todo.UnitTest.Mocks
 
         public TodoItemRepositoryFake()
         {
-            _source = new List<TodoItem>();
+            _source = new List<TodoItem>()
+            {
+                new TodoItem
+                {
+                    Id = 1,
+                    Title = "First TodoItem",
+                    Done = false
+                }
+            };
         }
 
         public Task Add(TodoItem item)
