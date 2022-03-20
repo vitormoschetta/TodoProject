@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: todo-api
-        image: vitormoschetta/todoapi:latest
+        image: vitormoschetta/todo.api:latest
         resources:
           limits:
             memory: "128Mi"

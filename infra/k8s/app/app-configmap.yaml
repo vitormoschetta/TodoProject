@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: app-configmap
 data:
-  API_URL: "http://api-service:6001/api/"
+  API_URL_CONNECTION: "http://api-service:6001/api/"

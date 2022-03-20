@@ -46,7 +46,7 @@ Informar username e password.
 #### Executar Container
 Necessário ter um arquivo `.env` com as informações de conexão com o banco de dados, seguindo o padrão do arquivo que está neste projeto.
 ```
-docker run -d --name todoapi --restart=always --env-file=./.env -p 80:6001 --log-opt max-size=100m --log-opt max-file=50 vitormoschetta/todoapi:latest
+docker run -d --name todo.api --restart=always --env-file=./.env -p 80:6001 --log-opt max-size=100m --log-opt max-file=50 vitormoschetta/todo.api:latest
 ```
 
 
@@ -66,5 +66,5 @@ Informar username e password.
 
 #### Executar Container
 ```
-docker run -d --name todoapp --restart=always -e API_URL_CONNECTION=http://<ip_publico_ec2_api>/api/ -p 80:6002 --log-opt max-size=100m --log-opt max-file=50 vitormoschetta/todoapp:latest
+docker run -d --name todo.app --restart=always -e API_URL_CONNECTION=http://<ip_publico_ec2_api>/api/ -p 80:6002 --log-opt max-size=100m --log-opt max-file=50 vitormoschetta/todo.app:latest
 ```

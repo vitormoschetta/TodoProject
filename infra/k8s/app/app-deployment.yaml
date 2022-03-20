@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: todo-app
-        image: vitormoschetta/todoapp:latest
+        image: vitormoschetta/todo.app:latest
         resources:
           limits:
             memory: "128Mi"
