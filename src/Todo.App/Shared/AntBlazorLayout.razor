@@ -1,0 +1,64 @@
+@inherits LayoutComponentBase
+
+<Layout>
+    <Header Class="header">
+        <Menu Theme="MenuTheme.Dark" Mode="MenuMode.Horizontal">
+            <MenuItem Key="1">
+            <NavLink href="/">Home</NavLink>
+            </MenuItem>
+            <MenuItem Key="3">
+            <NavLink href="submodule">Submodule</NavLink>
+            </MenuItem>
+            <MenuItem Key="4">
+            <NavLink href="about">About</NavLink>
+            </MenuItem>
+            <MenuItem Key="4">
+            <NavLink href="other">Other</NavLink>
+            </MenuItem>
+            <MenuItem Key="5" style="float:right">
+            Componente de Autenticação aqui
+            </MenuItem>
+        </Menu>
+    </Header>
+    @Body
+</Layout>
+
+
+<style>
+    .site-background {
+        background: #fff;
+    }
+
+    .menu {
+        height: 100%;
+        border-right: 0;
+    }
+
+    .site-card-content {
+        padding: 0 24px 24px;
+    }
+
+    .site-content {
+        padding: 24px;
+        margin: 0;
+        min-height: 500px;
+    }
+
+    [data-theme='compact'] .ant-advanced-search-form,
+    .ant-advanced-search-form {
+        padding: 24px;
+        background: #fbfbfb;
+        border: 1px solid #d9d9d9;
+        border-radius: 2px;
+    }
+
+    [data-theme='compact'] .ant-advanced-search-form .ant-form-item,
+    .ant-advanced-search-form .ant-form-item {
+        display: flex;
+    }
+
+    [data-theme='compact'] .ant-advanced-search-form .ant-form-item-control-wrapper,
+    .ant-advanced-search-form .ant-form-item-control-wrapper {
+        flex: 1;
+    }
+</style>

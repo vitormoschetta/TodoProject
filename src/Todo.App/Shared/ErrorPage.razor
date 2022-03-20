@@ -1,0 +1,14 @@
+@page "/error/{Message}"
+
+<Result
+    Status="error"
+    Title="Submission Failed"
+    SubTitle="@Message"/>
+
+
+@code {
+
+    [Parameter]
+    public string Message { get; set; }   
+
+}

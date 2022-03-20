@@ -1,0 +1,17 @@
+﻿<Router AppAssembly="@typeof(Program).Assembly" PreferExactMatches="@true">
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(AntBlazorLayout)" />
+    </Found>
+    <NotFound>
+        <LayoutView Layout="@typeof(AntBlazorLayout)">
+            <Result Status="404" Title="404" SubTitle="Sorry, the page you visited does not exist." Extra="extra" />
+        </LayoutView>
+    </NotFound>
+</Router>
+
+<AntContainer />
+
+@code
+{
+    RenderFragment extra = @<NavLink href="/"><Button Type="primary">Back Home</Button></NavLink>;
+}

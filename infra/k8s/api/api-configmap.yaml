@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-configmap
+data:  
+  DB_CONNECTION__HOST: db-service
+  DB_CONNECTION__USER: root
+  DB_CONNECTION__PASSWORD: MySql2022
+  DB_CONNECTION__DATABASE: "todoapidb"

@@ -12,6 +12,8 @@ using Todo.Domain.Models;
 
 namespace Todo.Api.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class TodoItemController : ApiBaseController
     {
         private readonly ITodoItemCommandHandler _commandHandler;

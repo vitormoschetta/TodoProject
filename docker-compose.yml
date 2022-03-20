@@ -1,0 +1,59 @@
+version: '3'
+
+networks: 
+  todonetwork:      
+    driver: bridge
+    name: todo-network
+
+services:
+
+  app:
+    container_name: todo.app
+    image: vitormoschetta/todo.app
+    build:
+      context: .
+      dockerfile: infra/docker/Todo.App/Dockerfile    
+    environment:
+      API_URL_CONNECTION: "http://todo.api:6001/api/"
+    ports:
+      - 6002:6002
+    networks:
+      - todonetwork
+
+  api:
+    container_name: todo.api
+    image: vitormoschetta/todo.api
+    build:
+      context: .
+      dockerfile: infra/docker/Todo.Api/Dockerfile
+    environment:
+      DB_CONNECTION__HOST: ${DB_CONNECTION__HOST}
+      DB_CONNECTION__USER: ${DB_CONNECTION__USER}
+      DB_CONNECTION__PASSWORD: ${DB_CONNECTION__PASSWORD}
+      DB_CONNECTION__DATABASE: ${DB_CONNECTION__DATABASE}
+      # ASPNETCORE_Kestrel__Certificates__Default__Password: ${ASPNETCORE_Kestrel__Certificates__Default__Password}
+      # ASPNETCORE_Kestrel__Certificates__Default__Path: ${ASPNETCORE_Kestrel__Certificates__Default__Path}
+    # volumes:
+    #   - ./Infra/docker/https:/https:ro
+    ports:
+      - 6001:6001
+    expose:
+      - 6001
+    networks:
+      - todonetwork
+    depends_on:
+      - db
+
+  db:
+    container_name: todo.api.db
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: MySql2022
+      MYSQL_DATABASE: "todoapidb"
+    volumes:
+      - ./infra/docker/MySql/:/tmp/seeds/
+    ports:
+      - "3306:3306"  
+    networks:
+      - todonetwork
+   

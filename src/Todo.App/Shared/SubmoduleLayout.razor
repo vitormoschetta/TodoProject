@@ -1,0 +1,29 @@
+@inherits LayoutComponentBase
+@layout AntBlazorLayout
+
+<Layout>
+    <Sider Width="200" Class="site-background">
+        <Menu Mode="MenuMode.Inline" DefaultSelectedKeys=@(new[] {"1"}) Class="menu">
+            <MenuItem Key="1">
+                <NavLink href="submodule"><Icon Type="home" Theme="outline" /> Dashboard</NavLink>                
+            </MenuItem>
+            <MenuItem Key="2">
+                <NavLink href="submodule/todo"><Icon Type="setting" Theme="outline" /> Todo</NavLink>    
+            </MenuItem>  
+            <MenuItem Key="3">
+                <NavLink href="submodule/subitem"><Icon Type="setting" Theme="outline" /> Subitem</NavLink>    
+            </MenuItem>           
+        </Menu>
+    </Sider>
+    <Layout Class="site-card-content">        
+        <Content Class="site-background site-content">
+            @Body
+        </Content>
+    </Layout>
+</Layout>
+
+<style> 
+    .menu {
+        background-color: #78B8E9;     
+    }
+</style>

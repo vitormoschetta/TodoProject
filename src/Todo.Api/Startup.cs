@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Todo.Api.Configurations;
 using Todo.Infrastructure.Database.Context;
 
 namespace Todo.Api
@@ -22,38 +23,13 @@ namespace Todo.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(builder =>
-                    builder
-                        .AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader());
-            });
-
+            services.CorsConfig();
             services.AddControllers();
-
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "TodoApi", Version = "v1" });
-            });
-
-            var dbConnection = new
-            {
-                Host = Configuration["DB_CONNECTION:HOST"],
-                User = Configuration["DB_CONNECTION:USER"],
-                Pass = Configuration["DB_CONNECTION:PASSWORD"],
-                Name = Configuration["DB_CONNECTION:DATABASE"]
-            };
-
-            var connectionString =
-                $"server={dbConnection.Host};" +
-                $"user={dbConnection.User};" +
-                $"password={dbConnection.Pass};" +
-                $"database={dbConnection.Name}";
-
-            services.AddDbContext<AppDbContext>(options =>
-                options.UseMySQL(connectionString));
+            services.SwaggerConfig();
+            services.RepositoriesConfig();            
+            services.CommandHandlersConfig();
+            services.QueryHandlersConfig();
+            services.DatabaseConfig(Configuration);            
         }
 
 
