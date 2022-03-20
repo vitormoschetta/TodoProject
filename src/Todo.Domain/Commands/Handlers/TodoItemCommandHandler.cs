@@ -31,7 +31,7 @@ namespace Todo.Domain.Commands.Handlers
                     return new GenericResponse(string.Join("; ", validationCommand.Errors), EOutputType.BusinessValidation);
                 }
 
-                if (await _uow.TodoItem.Exists(x => x.Title == command.Title))
+                if (await _uow.TodoItem.Exists(command.Title))
                 {
                     return new GenericResponse("TodoItem already registered!", EOutputType.BusinessValidation);
                 }

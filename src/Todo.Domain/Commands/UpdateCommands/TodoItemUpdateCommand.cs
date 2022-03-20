@@ -6,8 +6,8 @@ namespace Todo.Domain.Commands.UpdateCommands
     public class TodoItemUpdateCommand
     {
         public int Id { get; set; }
-        public bool Done { get; set; }
         public string Title { get; set; }
+        public bool Done { get; set; }
 
         public ValidationResult Validate()
         {

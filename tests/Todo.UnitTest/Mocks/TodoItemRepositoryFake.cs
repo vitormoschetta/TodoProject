@@ -13,6 +13,11 @@ namespace Todo.UnitTest.Mocks
     {
         private readonly List<TodoItem> _source;
 
+        public TodoItemRepositoryFake()
+        {
+            _source = new List<TodoItem>();
+        }
+
         public Task Add(TodoItem item)
         {
             _source.Add(item);
@@ -61,9 +66,9 @@ namespace Todo.UnitTest.Mocks
             return Task.FromResult(false);
         }
 
-        public Task<bool> Exists(Expression<Func<TodoItem, bool>> predicate)
+        public Task<bool> Exists(string title)
         {
-            return Task.FromResult(_source.Where(predicate.Compile()).Any());
+            return Task.FromResult(_source.Where(x => x.Title == title).Any());
         }
 
         public Task<TodoItem> Get(Expression<Func<TodoItem, bool>> predicate)

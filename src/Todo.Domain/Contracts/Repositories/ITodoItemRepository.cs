@@ -22,6 +22,6 @@ namespace Todo.Domain.Contracts.Repositories
         Task<TodoItem> Get(Expression<Func<TodoItem, bool>> predicate);        
         IQueryable<TodoItem> Query(Func<IQueryable<TodoItem>, IIncludableQueryable<TodoItem, object>> include = null);
         Task<bool> Exists(int id);
-        Task<bool> Exists(Expression<Func<TodoItem, bool>> predicate);
+        Task<bool> Exists(string title);
     }
 }

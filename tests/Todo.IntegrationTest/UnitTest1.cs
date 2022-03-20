@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 
-namespace Todo.UnitTest
+namespace Todo.IntegrationTest
 {
     public class UnitTest1
     {

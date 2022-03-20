@@ -5,8 +5,8 @@ namespace Todo.Domain.Commands.CreateCommands
 {
     public class TodoItemCreateCommand
     {
-        public bool Done { get; set; }
         public string Title { get; set; }
+        public bool Done { get; set; }
 
         public ValidationResult Validate()
         {
