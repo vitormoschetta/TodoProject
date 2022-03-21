@@ -20,7 +20,7 @@ namespace Todo.Domain.Commands.Handlers
             _uow = uow;
         }
 
-        public async Task<GenericResponse> Handle(TodoItemCreateCommand command)
+        public async Task<CommandResponse> Handle(TodoItemCreateCommand command)
         {
             try
             {
@@ -28,12 +28,12 @@ namespace Todo.Domain.Commands.Handlers
 
                 if (validationCommand.IsValid == false)
                 {
-                    return new GenericResponse(string.Join("; ", validationCommand.Errors), EOutputType.BusinessValidation);
+                    return new CommandResponse(string.Join("; ", validationCommand.Errors), EOutputType.BusinessValidation);
                 }
 
                 if (await _uow.TodoItem.Exists(command.Title))
                 {
-                    return new GenericResponse("TodoItem already registered!", EOutputType.BusinessValidation);
+                    return new CommandResponse("TodoItem already registered!", EOutputType.BusinessValidation);
                 }
 
                 var todoItem = new TodoItem()
@@ -45,15 +45,15 @@ namespace Todo.Domain.Commands.Handlers
                 await _uow.TodoItem.Add(todoItem);
                 await _uow.Commit();
 
-                return new GenericResponse("Created!");
+                return new CommandResponse("Created!");
             }
             catch (Exception ex)
             {
-                return new GenericResponse(ex);
+                return new CommandResponse(ex);
             }
         }
 
-        public async Task<GenericResponse> Handle(TodoItemUpdateCommand command)
+        public async Task<CommandResponse> Handle(TodoItemUpdateCommand command)
         {
             try
             {
@@ -61,14 +61,14 @@ namespace Todo.Domain.Commands.Handlers
 
                 if (validationCommand.IsValid == false)
                 {
-                    return new GenericResponse(string.Join("; ", validationCommand.Errors), EOutputType.BusinessValidation);
+                    return new CommandResponse(string.Join("; ", validationCommand.Errors), EOutputType.BusinessValidation);
                 }
 
                 var todoItem = await _uow.TodoItem.GetById(command.Id);
 
                 if (todoItem is null)
                 {
-                    return new GenericResponse("TodoItem not found", EOutputType.NotFound);
+                    return new CommandResponse("TodoItem not found", EOutputType.NotFound);
                 }
 
                 todoItem.Update(command.Title, command.Done);
@@ -76,15 +76,15 @@ namespace Todo.Domain.Commands.Handlers
                 await _uow.TodoItem.Update(todoItem);
                 await _uow.Commit();
 
-                return new GenericResponse("Updated!");
+                return new CommandResponse("Updated!");
             }
             catch (Exception ex)
             {
-                return new GenericResponse(ex);
+                return new CommandResponse(ex);
             }
         }
 
-        public async Task<GenericResponse> Handle(TodoItemDeleteCommand command)
+        public async Task<CommandResponse> Handle(TodoItemDeleteCommand command)
         {
             try
             {
@@ -92,30 +92,30 @@ namespace Todo.Domain.Commands.Handlers
 
                 if (validationCommand.IsValid == false)
                 {
-                    return new GenericResponse(string.Join("; ", validationCommand.Errors), EOutputType.BusinessValidation);
+                    return new CommandResponse(string.Join("; ", validationCommand.Errors), EOutputType.BusinessValidation);
                 }
 
                 var todoItem = await _uow.TodoItem.GetById(command.Id);
 
                 if (todoItem is null)
                 {
-                    return new GenericResponse("TodoItem not found", EOutputType.NotFound);
+                    return new CommandResponse("TodoItem not found", EOutputType.NotFound);
                 }
 
                 await _uow.TodoItem.Delete(todoItem);
                 await _uow.Commit();
 
-                return new GenericResponse("Deleted!");
+                return new CommandResponse("Deleted!");
 
 
             }
             catch (Exception ex)
             {
-                return new GenericResponse(ex);
+                return new CommandResponse(ex);
             }
         }
 
-        public async Task<GenericResponse> Handle(TodoItemMarkAsDoneCommand command)
+        public async Task<CommandResponse> Handle(TodoItemMarkAsDoneCommand command)
         {
             try
             {
@@ -123,14 +123,14 @@ namespace Todo.Domain.Commands.Handlers
 
                 if (validationCommand.IsValid == false)
                 {
-                    return new GenericResponse(string.Join("; ", validationCommand.Errors), EOutputType.BusinessValidation);
+                    return new CommandResponse(string.Join("; ", validationCommand.Errors), EOutputType.BusinessValidation);
                 }
 
                 var todoItem = await _uow.TodoItem.GetById(command.Id);
 
                 if (todoItem is null)
                 {
-                    return new GenericResponse("TodoItem not found", EOutputType.NotFound);
+                    return new CommandResponse("TodoItem not found", EOutputType.NotFound);
                 }
 
                 todoItem.MarkAsDone();
@@ -138,11 +138,11 @@ namespace Todo.Domain.Commands.Handlers
                 await _uow.TodoItem.Update(todoItem);
                 await _uow.Commit();
 
-                return new GenericResponse("Mark as Done!");
+                return new CommandResponse("Mark as Done!");
             }
             catch (Exception ex)
             {
-                return new GenericResponse(ex);
+                return new CommandResponse(ex);
             }
         }
 

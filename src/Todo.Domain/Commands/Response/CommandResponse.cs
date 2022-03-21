@@ -3,22 +3,22 @@ using Todo.Domain.Enums;
 
 namespace Todo.Domain.Commands.Response
 {
-    public class GenericResponse
+    public class CommandResponse
     {
-        public GenericResponse(string message, object data = null)
+        public CommandResponse(string message, object data = null)
         {
             Message = message;
             Data = data;
             OutputType = EOutputType.Success;
         }
 
-        public GenericResponse(string message, EOutputType outputType)
+        public CommandResponse(string message, EOutputType outputType)
         {
             Message = message;
             OutputType = outputType;
         }
 
-        public GenericResponse(Exception ex)
+        public CommandResponse(Exception ex)
         {
             OutputType = EOutputType.Failure;
             Message = ex.Message;

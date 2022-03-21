@@ -28,7 +28,7 @@ namespace Todo.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<GenericResponse>> Create([FromBody] TodoItemCreateCommand command)
+        public async Task<ActionResult<CommandResponse>> Create([FromBody] TodoItemCreateCommand command)
         {
             var response = await _commandHandler.Handle(command);
 
@@ -37,11 +37,11 @@ namespace Todo.Api.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<GenericResponse>> Update(Guid id, [FromBody] TodoItemUpdateCommand command)
+        public async Task<ActionResult<CommandResponse>> Update(Guid id, [FromBody] TodoItemUpdateCommand command)
         {
             if (id != command.Id)
             {
-                return CustomResponse(new GenericResponse("Invalid ID", EOutputType.InvalidInput));
+                return CustomResponse(new CommandResponse("Invalid ID", EOutputType.InvalidInput));
             }
 
             var response = await _commandHandler.Handle(command);
@@ -51,7 +51,7 @@ namespace Todo.Api.Controllers
 
 
         [HttpDelete()]
-        public async Task<ActionResult<GenericResponse>> Delete([FromQuery] TodoItemDeleteCommand command)
+        public async Task<ActionResult<CommandResponse>> Delete([FromQuery] TodoItemDeleteCommand command)
         {
             var response = await _commandHandler.Handle(command);
 

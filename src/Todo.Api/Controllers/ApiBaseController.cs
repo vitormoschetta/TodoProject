@@ -11,7 +11,7 @@ namespace Todo.Api.Controllers
         }
 
         [NonAction]
-        protected ActionResult CustomResponse(GenericResponse genericResponse)
+        protected ActionResult CustomResponse(CommandResponse genericResponse)
         {
             return genericResponse.OutputType switch
             {
@@ -24,7 +24,7 @@ namespace Todo.Api.Controllers
             };
         }
 
-        private ActionResult OkResponse(GenericResponse genericResponse)
+        private ActionResult OkResponse(CommandResponse genericResponse)
         {
             return Ok(new
             {
