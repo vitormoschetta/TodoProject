@@ -23,7 +23,7 @@ namespace Todo.IntegrationTest.Mocks
 
                 services.AddDbContext<AppDbContext>(options =>
                 {
-                    options.UseInMemoryDatabase(Guid.NewGuid().ToString());
+                    options.UseSqlite("Data Source=data.db");
                 });
 
                 var sp = services.BuildServiceProvider();
@@ -35,7 +35,7 @@ namespace Todo.IntegrationTest.Mocks
                     var logger = scopedServices
                         .GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
 
-                    db.Database.EnsureCreated();
+                    // db.Database.EnsureCreated();
                 }
             });
         }

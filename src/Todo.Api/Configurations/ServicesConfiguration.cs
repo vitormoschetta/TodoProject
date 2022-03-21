@@ -1,6 +1,4 @@
 using System;
-using System.IO;
-using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,8 +31,10 @@ namespace Todo.Api.Configurations
                 $"password={dbConnection.Pass};" +
                 $"database={dbConnection.Name}";
 
+            var serverVersion = new MySqlServerVersion(new Version(8, 0, 27));
+
             services.AddDbContext<AppDbContext>(options =>
-                options.UseMySQL(connectionString));
+                options.UseMySql(connectionString, serverVersion));
         }
 
         public static void SwaggerConfig(this IServiceCollection services)

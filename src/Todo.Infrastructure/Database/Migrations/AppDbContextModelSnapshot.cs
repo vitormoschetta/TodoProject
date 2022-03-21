@@ -14,7 +14,7 @@ namespace Todo.Infrastructure.Database.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
-                .HasAnnotation("ProductVersion", "5.0.5");
+                .HasAnnotation("ProductVersion", "5.0.10");
 
             modelBuilder.Entity("Todo.Domain.Models.TodoItem", b =>
                 {
@@ -29,7 +29,7 @@ namespace Todo.Infrastructure.Database.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("longtext")
                         .HasColumnName("title");
 
                     b.HasKey("Id");

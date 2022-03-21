@@ -13,8 +13,7 @@ namespace Todo.Infrastructure.Database.Configurations
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Id)
-                .HasColumnName("id")
-                .ValueGeneratedOnAdd();
+                .HasColumnName("id");                
 
             builder.Property(x => x.Title)
                 .IsRequired()
