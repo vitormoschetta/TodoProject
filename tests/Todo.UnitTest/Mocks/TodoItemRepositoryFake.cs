@@ -25,7 +25,7 @@ namespace Todo.UnitTest.Mocks
                 },
                 new TodoItem
                 {
-                    Id = 1,
+                    Id = 2,
                     Title = "Second Task",
                     Done = false
                 }
