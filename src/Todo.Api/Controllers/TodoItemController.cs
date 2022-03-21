@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -36,7 +37,7 @@ namespace Todo.Api.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<GenericResponse>> Update(int id, [FromBody] TodoItemUpdateCommand command)
+        public async Task<ActionResult<GenericResponse>> Update(Guid id, [FromBody] TodoItemUpdateCommand command)
         {
             if (id != command.Id)
             {
@@ -49,8 +50,8 @@ namespace Todo.Api.Controllers
         }
 
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<GenericResponse>> Delete(TodoItemDeleteCommand command)
+        [HttpDelete()]
+        public async Task<ActionResult<GenericResponse>> Delete([FromQuery] TodoItemDeleteCommand command)
         {
             var response = await _commandHandler.Handle(command);
 
@@ -66,7 +67,7 @@ namespace Todo.Api.Controllers
 
 
         [HttpGet("{id}")]
-        public async Task<TodoItem> GetById(int id)
+        public async Task<TodoItem> GetById(Guid id)
         {
             return await _queryHandler.GetById(id);
         }

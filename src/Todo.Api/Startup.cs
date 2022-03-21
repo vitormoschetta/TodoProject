@@ -26,10 +26,10 @@ namespace Todo.Api
             services.CorsConfig();
             services.AddControllers();
             services.SwaggerConfig();
-            services.RepositoriesConfig();            
+            services.RepositoriesConfig();
             services.CommandHandlersConfig();
             services.QueryHandlersConfig();
-            services.DatabaseConfig(Configuration);            
+            services.DatabaseConfig(Configuration);
         }
 
 
@@ -49,10 +49,13 @@ namespace Todo.Api
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TodoApi v1"));
 
-            if (context.Database.GetPendingMigrations().Any())
+            if (context.Database.IsRelational())
             {
-                context.Database.Migrate();
-            }
+                if (context.Database.GetPendingMigrations().Any())
+                {
+                    context.Database.Migrate();
+                }
+            }          
 
             // app.UseHttpsRedirection();
 

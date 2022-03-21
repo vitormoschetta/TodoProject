@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Todo.Domain.Models;
 using Todo.Infrastructure.Database.Context;
@@ -22,8 +23,18 @@ namespace Todo.IntegrationTest.Helpers
         {
             return new List<TodoItem>()
             {
-                new TodoItem(){ Id = 1, Title = "First Task", Done = false },
-                new TodoItem(){ Id = 2, Title = "Second Task",  Done = true }
+                new TodoItem
+                {
+                    Id = Guid.Parse("ddffe2dc-b162-406d-8520-429043bd9b7c"),
+                    Title = "First Task",
+                    Done = false
+                },
+                new TodoItem
+                {
+                    Id = Guid.Parse("0afe7382-2ac0-4ddf-a2bd-432da680b924"),
+                    Title = "Second Task",
+                    Done = true
+                }
             };
         }
     }

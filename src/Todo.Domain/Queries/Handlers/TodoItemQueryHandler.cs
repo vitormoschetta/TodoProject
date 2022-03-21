@@ -22,7 +22,7 @@ namespace Todo.Domain.Queries.Handlers
             return await _repository.GetAll();
         }
 
-        public async Task<TodoItem> GetById(int id)
+        public async Task<TodoItem> GetById(Guid id)
         {
             return await _repository.GetById(id);
         }

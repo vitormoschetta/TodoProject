@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Todo.Infrastructure.Database.Context;
+using Todo.IntegrationTest.Helpers;
 
 namespace Todo.IntegrationTest.Mocks
 {
@@ -23,7 +24,7 @@ namespace Todo.IntegrationTest.Mocks
 
                 services.AddDbContext<AppDbContext>(options =>
                 {
-                    options.UseSqlite("Data Source=data.db");
+                    options.UseInMemoryDatabase("Data Source=data.db");
                 });
 
                 var sp = services.BuildServiceProvider();

@@ -10,7 +10,7 @@ namespace Todo.Domain.Contracts.Queries.Handlers
     public interface ITodoItemQueryHandler
     {
         Task<IEnumerable<TodoItem>> GetAll();
-        Task<TodoItem> GetById(int id);
+        Task<TodoItem> GetById(Guid id);
         Task<TodoItem> Get(Expression<Func<TodoItem, bool>> predicate);
     }
 }

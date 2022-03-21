@@ -19,13 +19,13 @@ namespace Todo.UnitTest.Mocks
             {
                 new TodoItem
                 {
-                    Id = 1,
+                    Id = Guid.Parse("ddffe2dc-b162-406d-8520-429043bd9b7c"),
                     Title = "First Task",
                     Done = false
                 },
                 new TodoItem
                 {
-                    Id = 2,
+                    Id = Guid.Parse("0afe7382-2ac0-4ddf-a2bd-432da680b924"),
                     Title = "Second Task",
                     Done = false
                 }
@@ -56,7 +56,7 @@ namespace Todo.UnitTest.Mocks
             return Task.CompletedTask;
         }
 
-        public Task Delete(int id)
+        public Task Delete(Guid id)
         {
             var todoItem = _source.FirstOrDefault(x => x.Id == id);
 
@@ -68,7 +68,7 @@ namespace Todo.UnitTest.Mocks
             return Task.CompletedTask;
         }
 
-        public Task<bool> Exists(int id)
+        public Task<bool> Exists(Guid id)
         {
             var todoItem = _source.FirstOrDefault(x => x.Id == id);
 
@@ -95,7 +95,7 @@ namespace Todo.UnitTest.Mocks
             return Task.FromResult((IEnumerable<TodoItem>)_source);
         }
 
-        public Task<TodoItem> GetById(int id)
+        public Task<TodoItem> GetById(Guid id)
         {
             return Task.FromResult(_source.FirstOrDefault(x => x.Id == id));
         }
@@ -134,7 +134,7 @@ namespace Todo.UnitTest.Mocks
         {
             foreach (var item in _source)
             {
-                item.Done = true;                
+                item.Done = true;
             }
 
             return Task.CompletedTask;

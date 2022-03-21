@@ -60,9 +60,9 @@ namespace Todo.App.Services
             }
         }
 
-        public async Task<(HttpStatusCode, GenericResponse)> Delete(int id)
+        public async Task<(HttpStatusCode, GenericResponse)> Delete(Guid id)
         {
-            string queryString = $"TodoItem/{id}";            
+            string queryString = $"TodoItem?id={id}";
 
             using (HttpResponseMessage httpResponse = await httpClient.DeleteAsync(queryString))
             {

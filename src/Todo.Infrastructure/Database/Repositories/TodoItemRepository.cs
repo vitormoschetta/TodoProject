@@ -36,13 +36,13 @@ namespace Todo.Infrastructure.Database.Repositories
             await Task.CompletedTask;
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(Guid id)
         {
             _context.TodoItem.Remove(await _context.TodoItem.FindAsync(id));
             await Task.CompletedTask;
         }
 
-        public async Task<bool> Exists(int id)
+        public async Task<bool> Exists(Guid id)
         {
             return await _context.TodoItem.FindAsync(id) != null;
         }
@@ -62,7 +62,7 @@ namespace Todo.Infrastructure.Database.Repositories
             return await _context.TodoItem.ToListAsync();
         }
 
-        public async Task<TodoItem> GetById(int id)
+        public async Task<TodoItem> GetById(Guid id)
         {
             return await _context.TodoItem.FindAsync(id);
         }

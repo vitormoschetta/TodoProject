@@ -3,3 +3,5 @@ obj
 .sonarqube
 StrykerOutput/
 coverage*
+.vscode/
+.vs/

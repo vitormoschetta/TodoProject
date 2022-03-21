@@ -1,4 +1,4 @@
-# TodoApi
+# TodoProject
 
 ## Quick start
 ```

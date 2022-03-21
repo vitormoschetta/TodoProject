@@ -15,14 +15,14 @@ namespace Todo.Domain.Contracts.Repositories
         Task Update(TodoItem item);
         Task UpdateRange(IEnumerable<TodoItem> items);
         Task Delete(TodoItem item);
-        Task Delete(int id);
+        Task Delete(Guid id);
         Task UpdateAllToDone();
         Task<IEnumerable<TodoItem>> GetAll();
         Task<IEnumerable<TodoItem>> GetMany(Expression<Func<TodoItem, bool>> predicate);
-        Task<TodoItem> GetById(int id);
+        Task<TodoItem> GetById(Guid id);
         Task<TodoItem> Get(Expression<Func<TodoItem, bool>> predicate);        
         IQueryable<TodoItem> Query(Func<IQueryable<TodoItem>, IIncludableQueryable<TodoItem, object>> include = null);
-        Task<bool> Exists(int id);
+        Task<bool> Exists(Guid id);
         Task<bool> Exists(string title);
     }
 }

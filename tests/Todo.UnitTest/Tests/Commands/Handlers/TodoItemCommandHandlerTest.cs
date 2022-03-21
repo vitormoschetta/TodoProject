@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Todo.Domain.Commands.CreateCommands;
@@ -113,7 +114,7 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
             // Arrange
             var command = new TodoItemDeleteCommand()
             {
-                Id = 1
+                Id = Guid.Parse("ddffe2dc-b162-406d-8520-429043bd9b7c")
             };
 
             // Act
@@ -143,7 +144,7 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
             // Arrange
             var command = new TodoItemDeleteCommand()
             {
-                Id = 99
+                Id = Guid.Parse("6d8268a8-d6fe-4b79-90d0-f2ddb1231648")
             };
 
             // Act
@@ -158,7 +159,7 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
         public async Task When_trying_to_delete_any_emptyItem_it_returns_without_success()
         {
             // Arrange
-            var command = new TodoItemDeleteCommand();
+            var command = new TodoItemDeleteCommand();            
 
             // Act
             var response = await handler.Handle(command);
@@ -174,7 +175,7 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
             // Arrange
             var command = new TodoItemUpdateCommand()
             {
-                Id = 1,
+                Id = Guid.Parse("ddffe2dc-b162-406d-8520-429043bd9b7c"),
                 Title = "new tilte",
                 Done = false
             };
@@ -206,7 +207,7 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
             // Arrange
             var command = new TodoItemUpdateCommand()
             {
-                Id = 99,
+                Id = Guid.Parse("6d8268a8-d6fe-4b79-90d0-f2ddb1231648"),
                 Title = "new title",
                 Done = false
             };
@@ -239,7 +240,7 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
             // Arrange
             var command = new TodoItemMarkAsDoneCommand()
             {
-                Id = 1,              
+                Id = Guid.Parse("ddffe2dc-b162-406d-8520-429043bd9b7c")
             };
 
             // Act
@@ -269,7 +270,7 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
             // Arrange
             var command = new TodoItemMarkAsDoneCommand()
             {
-                Id = 99              
+                Id = Guid.Parse("6d8268a8-d6fe-4b79-90d0-f2ddb1231648")
             };
 
             // Act
@@ -309,6 +310,6 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
             // Após a execução do Handler, verificamos que NÃO existe nenhuma task com status de não concluída (Done == true)
             Assert.True(isThereTaskNotDone, "Para um teste eficaz é necessário que exista pelo menos uma tarefa não concluída (Done == false) no repositório Fake");
             Assert.False(repository.Query().Where(x => x.Done == false).Any(), "Todos os itens devem ser atualizados para o status de concluído (Done)");
-        }       
+        }
     }
 }

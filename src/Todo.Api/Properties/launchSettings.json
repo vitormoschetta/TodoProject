@@ -14,7 +14,11 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DB_CONNECTION__HOST": "localhost",
+        "DB_CONNECTION__USER": "root",
+        "DB_CONNECTION__PASSWORD": "MySql2022",
+        "DB_CONNECTION__DATABASE": "todoapidb"
       }
     },
     "Todo.Api": {

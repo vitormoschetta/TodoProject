@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
@@ -9,6 +10,6 @@ namespace Todo.App.Services
     {
         Task<(HttpStatusCode, IEnumerable<TodoItem>)> GetAll();
         Task<(HttpStatusCode, GenericResponse)> Add(TodoItem todo);
-        Task<(HttpStatusCode, GenericResponse)> Delete(int id);
+        Task<(HttpStatusCode, GenericResponse)> Delete(Guid id);
     }
 }
