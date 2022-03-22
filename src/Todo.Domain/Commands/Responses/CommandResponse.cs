@@ -1,7 +1,8 @@
 using System;
+using System.Text.Json.Serialization;
 using Todo.Domain.Enums;
 
-namespace Todo.Domain.Commands.Response
+namespace Todo.Domain.Commands.Responses
 {
     public class CommandResponse
     {
@@ -24,6 +25,7 @@ namespace Todo.Domain.Commands.Response
             Message = ex.Message;
         }
 
+        [JsonIgnore]
         public EOutputType OutputType { get; set; }
         public bool Success => OutputType == EOutputType.Success;
         public string Message { get; set; }

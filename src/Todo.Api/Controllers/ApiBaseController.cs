@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Todo.Domain.Commands.Response;
+using Todo.Domain.Commands.Responses;
 using Todo.Domain.Enums;
 
 namespace Todo.Api.Controllers
@@ -11,36 +11,27 @@ namespace Todo.Api.Controllers
         }
 
         [NonAction]
-        protected ActionResult CustomResponse(CommandResponse genericResponse)
+        protected ActionResult CustomResponse(CommandResponse commandResponse)
         {
-            return genericResponse.OutputType switch
+            return commandResponse.OutputType switch
             {
-                EOutputType.Success => OkResponse(genericResponse),
-                EOutputType.InvalidInput => BadRequestResponse(genericResponse.Message),
-                EOutputType.BusinessValidation => BadRequest(genericResponse.Message),
-                EOutputType.NotFound => NotFound(),
-                EOutputType.IntegrationError => BadRequestResponse(genericResponse.Message),
-                _ => StatusCode(500, genericResponse.Message),
+                EOutputType.Success => Ok(commandResponse),
+                EOutputType.InvalidInput => BadRequest(commandResponse),
+                EOutputType.BusinessValidation => BadRequest(commandResponse),
+                EOutputType.NotFound => NotFound(commandResponse),
+                EOutputType.IntegrationError => BadRequest(commandResponse),
+                _ => StatusCode(500, commandResponse.Message),
             };
         }
 
-        private ActionResult OkResponse(CommandResponse genericResponse)
+        private object MapTo(CommandResponse commandResponse)
         {
-            return Ok(new
+            return new
             {
-                success = genericResponse.Success,
-                data = genericResponse.Data,
-                message = genericResponse.Message
-            });
-        }
-
-        private ActionResult BadRequestResponse(string message = null)
-        {
-            return BadRequest(new
-            {
-                success = false,
-                message = message
-            });
-        }
+                success = commandResponse.Success,
+                data = commandResponse.Data,
+                message = commandResponse.Message
+            };
+        }     
     }
 }

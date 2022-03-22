@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Todo.Domain.Commands.CreateCommands;
 using Todo.Domain.Commands.DeleteCommands;
-using Todo.Domain.Commands.Response;
+using Todo.Domain.Commands.Responses;
 using Todo.Domain.Commands.UpdateCommands;
 
 namespace Todo.Domain.Contracts.Commands.Handlers

@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
 using Todo.Api.Configurations;
 using Todo.Infrastructure.Database.Context;
 
@@ -23,13 +22,13 @@ namespace Todo.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.CorsConfig();
+            services.AddCustomCors();
             services.AddControllers();
-            services.SwaggerConfig();
-            services.RepositoriesConfig();
-            services.CommandHandlersConfig();
-            services.QueryHandlersConfig();
-            services.DatabaseConfig(Configuration);
+            services.AddSwagger();
+            services.AddRepositories();
+            services.AddCommandHandlers();
+            services.AddQueryHandlers();
+            services.AddDatabase(Configuration);
         }
 
 
@@ -55,7 +54,7 @@ namespace Todo.Api
                 {
                     context.Database.Migrate();
                 }
-            }          
+            }
 
             // app.UseHttpsRedirection();
 
