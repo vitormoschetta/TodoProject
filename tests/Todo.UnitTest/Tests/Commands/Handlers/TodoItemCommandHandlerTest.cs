@@ -5,6 +5,9 @@ using Todo.Domain.Commands.CreateCommands;
 using Todo.Domain.Commands.DeleteCommands;
 using Todo.Domain.Commands.Handlers;
 using Todo.Domain.Commands.UpdateCommands;
+using Todo.Domain.Contracts.Commands.Handlers;
+using Todo.Domain.Contracts.Repositories;
+using Todo.Domain.Contracts.Services.External;
 using Todo.Domain.Enums;
 using Todo.UnitTest.Mocks;
 using Xunit;
@@ -13,9 +16,10 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
 {
     public class TodoItemCommandHandlerTest
     {
-        private readonly TodoItemRepositoryFake repository;
-        private readonly UnitOfWorkFake uow;
-        private readonly TodoItemCommandHandler handler;
+        private readonly ITodoItemRepository repository;
+        private readonly IUnitOfWork uow;
+        private readonly IExternalApi externalApi;
+        private readonly ITodoItemCommandHandler handler;
         private TodoItemCreateCommand createCommandNotInstantiated;
         private TodoItemDeleteCommand deleteCommandNotInstantiated;
         private TodoItemUpdateCommand updateCommandNotInstantiated;
@@ -25,7 +29,8 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
         {
             repository = new TodoItemRepositoryFake();
             uow = new UnitOfWorkFake(repository);
-            handler = new TodoItemCommandHandler(uow);
+            externalApi = new ExternalApiFake();
+            handler = new TodoItemCommandHandler(uow, externalApi);
         }
 
         [Fact]
