@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 using Todo.Api.Configurations;
 using Todo.Infrastructure.Database.Context;
 
@@ -28,7 +29,7 @@ namespace Todo.Api
             services.AddRepositories();
             services.AddCommandHandlers();
             services.AddQueryHandlers();
-            services.AddDatabase(Configuration);
+            services.AddDatabase(Configuration);            
         }
 
 
@@ -44,6 +45,8 @@ namespace Todo.Api
                 app.UseExceptionHandler("/Error");
                 // app.UseHsts();
             }
+
+            app.UseSerilogRequestLogging();
 
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TodoApi v1"));

@@ -1,5 +1,7 @@
 using System;
+using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Todo.Domain.Commands.CreateCommands;
 using Todo.Domain.Commands.DeleteCommands;
 using Todo.Domain.Commands.Responses;
@@ -14,10 +16,12 @@ namespace Todo.Domain.Commands.Handlers
     public class TodoItemCommandHandler : ITodoItemCommandHandler
     {
         private readonly IUnitOfWork _uow;
+        private readonly ILogger _logger;
 
-        public TodoItemCommandHandler(IUnitOfWork uow)
+        public TodoItemCommandHandler(IUnitOfWork uow, ILogger<TodoItemCommandHandler> logger)
         {
             _uow = uow;
+            _logger = logger;
         }
 
         public async Task<CommandResponse> Handle(TodoItemCreateCommand command)
@@ -44,6 +48,9 @@ namespace Todo.Domain.Commands.Handlers
 
                 await _uow.TodoItem.Add(todoItem);
                 await _uow.Commit();
+
+                // Todo: add logging tags to the logger
+                _logger.LogInformation($"TodoItem Created: {JsonSerializer.Serialize(todoItem)}");
 
                 return new CommandResponse("Created!");
             }

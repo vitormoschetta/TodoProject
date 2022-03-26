@@ -2,18 +2,15 @@
 
 ## Quick start
 ```
-docker-compose up -d --build
+docker-compose up -d kibana
+docker-compose up -d api app
 ```
 
-<http://localhost:6002/>
+Access App:
+
+<http://0.0.0.0:6002/>
 
 
-<br>
+Access Kabana:
 
-## Configurations
-
-### Add Migrations
-```
-cd ./src/Todo.Api
-dotnet ef migrations add initial -p ../Todo.Infrastructure/Todo.Infrastructure.csproj -o Database/Migrations
-```
+<http://0.0.0.0:5601/>
