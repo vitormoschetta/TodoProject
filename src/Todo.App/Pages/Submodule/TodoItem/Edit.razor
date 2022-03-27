@@ -1,3 +1,77 @@
 @page "/submodule/todo/edit/{Id}"
+@inject Services.ITodoService _todoService
+@inject NavigationManager _navigationManager
+@inject Helpers.TodoNotification _notification
 
-Todo edit
+
+<Form Model="@todo" OnFinish="OnFinish" Class="ant-advanced-search-form">
+    <Row>
+        <FormItem Label="Título">
+            <Input @bind-Value="@context.Title" id="titulo"/>
+        </FormItem>
+    </Row>
+
+    <Row>
+        <FormItem Label="Concluído?">
+                <RadioGroup @bind-Value="@context.Done" ButtonStyle="@RadioButtonStyle.Solid">
+                    <Radio RadioButton Value="@(true)">Sim</Radio>
+                    <Radio RadioButton Value="@(false)">Não</Radio>
+                </RadioGroup>
+        </FormItem>
+    </Row>
+
+    <Row>
+        <GridCol Span="24" Style="text-align:right;">
+            <Button Type="@ButtonType.Primary" HtmlType="submit" id="confirmar">
+                Submit
+            </Button>
+            <Button Type="@ButtonType.Default" @onclick="Return">
+                Return
+            </Button>
+        </GridCol>
+    </Row>
+</Form>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    private Todo.App.Models.TodoItem todo = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var (_, todos) = await _todoService.GetAll();
+            todo = todos.FirstOrDefault(x => x.Id == Guid.Parse(Id));
+        }
+        catch (Exception ex)
+        {
+            _navigationManager.NavigateTo($"/errordetail/{ex.Message}", false);
+        }
+    }
+
+    private async void OnFinish(EditContext editContext)
+    {
+        try
+        {
+            var (_, response) = await _todoService.Update(todo);
+
+            if (!response.Success)
+            {
+                _notification.NoticeWithIcon("Erro ao tentar cadastrar", response.Message, NotificationType.Error);
+                return;
+            }
+
+            _notification.NoticeWithIcon("Cadastrado com sucesso", string.Empty, NotificationType.Success);
+            Return();
+
+        }
+        catch (Exception ex)
+        {
+            _navigationManager.NavigateTo($"/error/{ex.Message}", false);
+        }
+    }
+
+    private void Return() => _navigationManager.NavigateTo("/submodule/todo");
+}
