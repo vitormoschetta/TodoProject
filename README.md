@@ -33,3 +33,8 @@ Create Index Pattern:
 <https://medium.com/@vitormoschetta/visualizando-logs-com-kibana-hands-on-421fce9a7618>
 
 
+Kibana Query Language:
+
+<https://www.elastic.co/guide/en/kibana/7.17/kuery-query.html>
+
+
