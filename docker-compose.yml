@@ -33,8 +33,8 @@ services:
       DB_CONNECTION__DATABASE: ${DB_CONNECTION__DATABASE}
       # ASPNETCORE_Kestrel__Certificates__Default__Password: ${ASPNETCORE_Kestrel__Certificates__Default__Password}
       # ASPNETCORE_Kestrel__Certificates__Default__Path: ${ASPNETCORE_Kestrel__Certificates__Default__Path}
-    # volumes:
-    #   - ./Infra/docker/https:/https:ro
+    volumes:
+      - ./src/Todo.Api/appsettings.DockerDevelopment.json:/public/appsettings.json
     ports:
       - 6001:6001
     expose:
@@ -43,6 +43,21 @@ services:
       - todonetwork
     depends_on:
       - db
+
+  external:
+    container_name: external.api
+    image: vitormoschetta/todo.external.api
+    build:
+      context: .
+      dockerfile: infra/docker/External.Api/Dockerfile
+    environment:
+      ASPNETCORE_URLS: "http://*:7001"    
+    ports:
+      - 7001:7001
+    expose:
+      - 7001
+    networks:
+      - todonetwork    
 
   db:
     container_name: todo.api.db
