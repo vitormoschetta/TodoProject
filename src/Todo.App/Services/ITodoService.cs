@@ -10,6 +10,7 @@ namespace Todo.App.Services
     {
         Task<(HttpStatusCode, IEnumerable<TodoItem>)> GetAll();
         Task<(HttpStatusCode, GenericResponse)> Add(TodoItem todo);
+        Task<(HttpStatusCode, GenericResponse)> Update(TodoItem todo);
         Task<(HttpStatusCode, GenericResponse)> Delete(Guid id);
     }
 }

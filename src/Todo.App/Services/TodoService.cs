@@ -79,5 +79,25 @@ namespace Todo.App.Services
             }
         }
 
+        public async Task<(HttpStatusCode, GenericResponse)> Update(TodoItem todo)
+        {
+            string queryString = $"TodoItem/{todo.Id}";
+
+            StringContent requestContent = new StringContent(JsonConvert.SerializeObject(todo), Encoding.UTF8, "application/json");
+
+            using (HttpResponseMessage httpResponse = await httpClient.PutAsync(queryString, requestContent))
+            {
+                string responseContent = await httpResponse.Content.ReadAsStringAsync();
+
+                if (httpResponse.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new HttpRequestException();
+                }
+
+                var response = JsonConvert.DeserializeObject<GenericResponse>(responseContent);
+
+                return (httpResponse.StatusCode, response);
+            }
+        }
     }
 }
