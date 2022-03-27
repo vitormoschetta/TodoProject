@@ -8,8 +8,8 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using Todo.Api.Configurations;
 using Todo.Domain.Contracts.Services.External;
-using Todo.Domain.Services;
 using Todo.Infrastructure.Database.Context;
+using Todo.Infrastructure.Services;
 
 namespace Todo.Api
 {

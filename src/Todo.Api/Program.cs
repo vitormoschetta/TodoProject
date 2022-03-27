@@ -39,7 +39,7 @@ namespace Todo.Api
                         {
                             AutoRegisterTemplate = true,
                             AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv6,
-                            IndexFormat = $".kibana-event-log-{DateTime.UtcNow:yyyy.MM.dd}"
+                            IndexFormat = $"todo-api-{DateTime.UtcNow:yyyy.MM.dd}"
                         })
                         .WriteTo.Console()
                         .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)

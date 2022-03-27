@@ -20,6 +20,7 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
         private readonly ITodoItemRepository repository;
         private readonly IUnitOfWork uow;
         private readonly IExternalApi externalApi;
+        private readonly ILogger<TodoItemCommandHandler> logger;
         private readonly ITodoItemCommandHandler handler;
         private TodoItemCreateCommand createCommandNotInstantiated;
         private TodoItemDeleteCommand deleteCommandNotInstantiated;
@@ -30,9 +31,9 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
         {
             repository = new TodoItemRepositoryFake();
             uow = new UnitOfWorkFake(repository);
-            logger = new Logger<TodoItemCommandHandler>(new LoggerFactory());            
+            logger = new Logger<TodoItemCommandHandler>(new LoggerFactory());
             externalApi = new ExternalApiFake();
-            handler = new TodoItemCommandHandler(uow, externalApi);
+            handler = new TodoItemCommandHandler(uow, externalApi, logger);
         }
 
         [Fact]
