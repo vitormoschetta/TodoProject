@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Threading.Tasks;
 using Todo.Domain.Commands.CreateCommands;
 using Todo.Domain.Commands.DeleteCommands;
@@ -6,6 +7,7 @@ using Todo.Domain.Commands.Responses;
 using Todo.Domain.Commands.UpdateCommands;
 using Todo.Domain.Contracts.Commands.Handlers;
 using Todo.Domain.Contracts.Repositories;
+using Todo.Domain.Contracts.Services.External;
 using Todo.Domain.Enums;
 using Todo.Domain.Models;
 
@@ -14,10 +16,12 @@ namespace Todo.Domain.Commands.Handlers
     public class TodoItemCommandHandler : ITodoItemCommandHandler
     {
         private readonly IUnitOfWork _uow;
+        private readonly IExternalApi _externalApi;
 
-        public TodoItemCommandHandler(IUnitOfWork uow)
+        public TodoItemCommandHandler(IUnitOfWork uow, IExternalApi externalApi)
         {
             _uow = uow;
+            _externalApi = externalApi;
         }
 
         public async Task<CommandResponse> Handle(TodoItemCreateCommand command)
@@ -41,6 +45,13 @@ namespace Todo.Domain.Commands.Handlers
                     Title = command.Title,
                     Done = command.Done
                 };
+
+                var httpResponse = await _externalApi.PostTodoItem(todoItem);
+
+                if (httpResponse != HttpStatusCode.OK)
+                {
+                    return new CommandResponse("não foi possível enviar para o serviço externo", EOutputType.Failure);
+                }
 
                 await _uow.TodoItem.Add(todoItem);
                 await _uow.Commit();

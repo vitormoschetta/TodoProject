@@ -6,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Todo.Api.Configurations;
+using Todo.Domain.Contracts.Services.External;
+using Todo.Domain.Services;
 using Todo.Infrastructure.Database.Context;
 
 namespace Todo.Api
@@ -29,6 +31,7 @@ namespace Todo.Api
             services.AddCommandHandlers();
             services.AddQueryHandlers();
             services.AddDatabase(Configuration);
+            services.AddHttpClient<IExternalApi, ExternalApi>();
         }
 
 
