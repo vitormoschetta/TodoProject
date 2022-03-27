@@ -27,6 +27,9 @@ Access Kabana:
 
 <http://0.0.0.0:5601/>
 
+
 Create Index Pattern:
+
+<https://medium.com/@vitormoschetta/visualizando-logs-com-kibana-hands-on-421fce9a7618>
 
 
