@@ -19,6 +19,8 @@ services:
       - 6002:6002
     networks:
       - todonetwork
+    depends_on:
+      - api      
 
   api:
     container_name: todo.api
@@ -31,10 +33,12 @@ services:
       DB_CONNECTION__USER: ${DB_CONNECTION__USER}
       DB_CONNECTION__PASSWORD: ${DB_CONNECTION__PASSWORD}
       DB_CONNECTION__DATABASE: ${DB_CONNECTION__DATABASE}
+      Elasticsearch__Uri: ${Elasticsearch__Uri}
+      ExternalApi__BaseAddress: ${ExternalApi__BaseAddress}
       # ASPNETCORE_Kestrel__Certificates__Default__Password: ${ASPNETCORE_Kestrel__Certificates__Default__Password}
       # ASPNETCORE_Kestrel__Certificates__Default__Path: ${ASPNETCORE_Kestrel__Certificates__Default__Path}
-    volumes:
-      - ./src/Todo.Api/appsettings.DockerDevelopment.json:/public/appsettings.json
+    # volumes:
+    #   - ./src/Todo.Api/appsettings.DockerDevelopment.json:/public/appsettings.json
     ports:
       - 6001:6001
     expose:
@@ -43,6 +47,7 @@ services:
       - todonetwork
     depends_on:
       - db
+      - external
 
   external:
     container_name: external.api
@@ -63,7 +68,7 @@ services:
     container_name: todo.api.db
     image: mysql:5.7
     environment:
-      -MYSQL_ROOT_PASSWORD: MySql2022
+      MYSQL_ROOT_PASSWORD: MySql2022
       MYSQL_DATABASE: "todoapidb"
     volumes:
       - ./infra/docker/MySql/:/tmp/seeds/

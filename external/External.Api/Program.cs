@@ -16,4 +16,14 @@ app.MapPost("/todoitem", (TodoItem request) =>
     return Results.Ok();
 });
 
+app.MapPut("/todoitem", (TodoItem request) =>
+{
+    return Results.Ok();
+});
+
+app.MapDelete("/todoitem", (Guid id) =>
+{
+    return Results.Ok();
+});
+
 app.Run();

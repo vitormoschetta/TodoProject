@@ -7,7 +7,17 @@ namespace Todo.UnitTest.Mocks
 {
     public class ExternalApiFake : IExternalApi
     {
+        public async Task<HttpStatusCode> DeleteTodoItem(TodoItem todoItem)
+        {
+            return await Task.FromResult(HttpStatusCode.OK);
+        }
+
         public async Task<HttpStatusCode> PostTodoItem(TodoItem todoItem)
+        {
+            return await Task.FromResult(HttpStatusCode.OK);
+        }
+
+        public async Task<HttpStatusCode> PutTodoItem(TodoItem todoItem)
         {
             return await Task.FromResult(HttpStatusCode.OK);
         }

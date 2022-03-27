@@ -14,12 +14,7 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "DB_CONNECTION__HOST": "localhost",
-        "DB_CONNECTION__USER": "root",
-        "DB_CONNECTION__PASSWORD": "MySql2022",
-        "DB_CONNECTION__DATABASE": "todoapidb",
-        "Elasticsearch__Uri":"http://localhost:9200"
+        "ASPNETCORE_ENVIRONMENT": "Development"        
       }
     },
     "Todo.Api": {
@@ -34,7 +29,8 @@
         "DB_CONNECTION__USER": "root",
         "DB_CONNECTION__PASSWORD": "MySql2022",
         "DB_CONNECTION__DATABASE": "todoapidb",
-        "Elasticsearch__Uri":"http://localhost:9200"
+        "Elasticsearch__Uri":"http://localhost:9200",
+        "ExternalApi__BaseAddress":"http://localhost:7001"
       }
     }
   }

@@ -21,11 +21,11 @@ namespace Todo.Domain.Commands.Handlers
         private readonly ILogger _logger;
         private readonly IExternalApi _externalApi;
 
-        public TodoItemCommandHandler(IUnitOfWork uow, ILogger<TodoItemCommandHandler> logger)
+        public TodoItemCommandHandler(IUnitOfWork uow, IExternalApi externalApi, ILogger<TodoItemCommandHandler> logger)
         {
             _uow = uow;
+            _externalApi = externalApi;
             _logger = logger;
-            _externalApi = externalApi;               
         }
 
         public async Task<CommandResponse> Handle(TodoItemCreateCommand command)
@@ -91,8 +91,17 @@ namespace Todo.Domain.Commands.Handlers
 
                 todoItem.Update(command.Title, command.Done);
 
+                var httpResponse = await _externalApi.PutTodoItem(todoItem);
+
+                if (httpResponse != HttpStatusCode.OK)
+                {
+                    return new CommandResponse("não foi possível enviar para o serviço externo", EOutputType.Failure);
+                }
+
                 await _uow.TodoItem.Update(todoItem);
                 await _uow.Commit();
+
+                _logger.LogInformation($"TodoItem Updated: {JsonSerializer.Serialize(todoItem)}");
 
                 return new CommandResponse("Updated!");
             }
@@ -120,12 +129,19 @@ namespace Todo.Domain.Commands.Handlers
                     return new CommandResponse("TodoItem not found", EOutputType.NotFound);
                 }
 
+                var httpResponse = await _externalApi.DeleteTodoItem(todoItem);
+
+                if (httpResponse != HttpStatusCode.OK)
+                {
+                    return new CommandResponse("não foi possível enviar para o serviço externo", EOutputType.Failure);
+                }
+
                 await _uow.TodoItem.Delete(todoItem);
                 await _uow.Commit();
 
+                _logger.LogInformation($"TodoItem Deleted: {JsonSerializer.Serialize(todoItem)}");
+
                 return new CommandResponse("Deleted!");
-
-
             }
             catch (Exception ex)
             {
