@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Todo.Domain.Commands.CreateCommands;
 using Todo.Domain.Commands.DeleteCommands;
 using Todo.Domain.Commands.Handlers;
@@ -29,6 +30,7 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
         {
             repository = new TodoItemRepositoryFake();
             uow = new UnitOfWorkFake(repository);
+            logger = new Logger<TodoItemCommandHandler>(new LoggerFactory());            
             externalApi = new ExternalApiFake();
             handler = new TodoItemCommandHandler(uow, externalApi);
         }
@@ -164,7 +166,7 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
         public async Task When_trying_to_delete_any_emptyItem_it_returns_without_success()
         {
             // Arrange
-            var command = new TodoItemDeleteCommand();            
+            var command = new TodoItemDeleteCommand();
 
             // Act
             var response = await handler.Handle(command);

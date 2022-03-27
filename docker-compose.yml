@@ -63,7 +63,7 @@ services:
     container_name: todo.api.db
     image: mysql:5.7
     environment:
-      MYSQL_ROOT_PASSWORD: MySql2022
+      -MYSQL_ROOT_PASSWORD: MySql2022
       MYSQL_DATABASE: "todoapidb"
     volumes:
       - ./infra/docker/MySql/:/tmp/seeds/
@@ -71,4 +71,28 @@ services:
       - "3306:3306"  
     networks:
       - todonetwork
+
+  elasticsearch:
+    container_name: todo.elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.1
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:      
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+    networks:
+      - todonetwork 
+
+  kibana:
+    container_name: todo.kibana
+    image: docker.elastic.co/kibana/kibana:7.11.1
+    ports:
+      - 5601:5601
+    environment:
+      - ELASTICSEARCH_HOSTS=http://todo.elasticsearch:9200
+    networks:
+      - todonetwork
+    depends_on:
+      - elasticsearch
    
