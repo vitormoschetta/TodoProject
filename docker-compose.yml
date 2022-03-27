@@ -19,6 +19,8 @@ services:
       - 6002:6002
     networks:
       - todonetwork
+    depends_on:
+      - api      
 
   api:
     container_name: todo.api
@@ -31,10 +33,12 @@ services:
       DB_CONNECTION__USER: ${DB_CONNECTION__USER}
       DB_CONNECTION__PASSWORD: ${DB_CONNECTION__PASSWORD}
       DB_CONNECTION__DATABASE: ${DB_CONNECTION__DATABASE}
+      Elasticsearch__Uri: ${Elasticsearch__Uri}
+      ExternalApi__BaseAddress: ${ExternalApi__BaseAddress}
       # ASPNETCORE_Kestrel__Certificates__Default__Password: ${ASPNETCORE_Kestrel__Certificates__Default__Password}
       # ASPNETCORE_Kestrel__Certificates__Default__Path: ${ASPNETCORE_Kestrel__Certificates__Default__Path}
     # volumes:
-    #   - ./Infra/docker/https:/https:ro
+    #   - ./src/Todo.Api/appsettings.DockerDevelopment.json:/public/appsettings.json
     ports:
       - 6001:6001
     expose:
@@ -43,6 +47,22 @@ services:
       - todonetwork
     depends_on:
       - db
+      - external
+
+  external:
+    container_name: external.api
+    image: vitormoschetta/todo.external.api
+    build:
+      context: .
+      dockerfile: infra/docker/External.Api/Dockerfile
+    environment:
+      ASPNETCORE_URLS: "http://*:7001"    
+    ports:
+      - 7001:7001
+    expose:
+      - 7001
+    networks:
+      - todonetwork    
 
   db:
     container_name: todo.api.db
@@ -56,4 +76,28 @@ services:
       - "3306:3306"  
     networks:
       - todonetwork
+
+  elasticsearch:
+    container_name: todo.elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.1
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:      
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+    networks:
+      - todonetwork 
+
+  kibana:
+    container_name: todo.kibana
+    image: docker.elastic.co/kibana/kibana:7.11.1
+    ports:
+      - 5601:5601
+    environment:
+      - ELASTICSEARCH_HOSTS=http://todo.elasticsearch:9200
+    networks:
+      - todonetwork
+    depends_on:
+      - elasticsearch
    

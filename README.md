@@ -1,19 +1,32 @@
 # TodoProject
 
-## Quick start
+## Quick start App
 ```
-docker-compose up -d --build
+docker-compose up -d app
 ```
 
-<http://localhost:6002/>
+Access Todo.Api:
+
+<http://0.0.0.0:6001/>
+
+
+Access Todo.App:
+
+<http://0.0.0.0:6002/>
 
 
 <br>
 
-## Configurations
 
-### Add Migrations
+## quick start Elastic:
 ```
-cd ./src/Todo.Api
-dotnet ef migrations add initial -p ../Todo.Infrastructure/Todo.Infrastructure.csproj -o Database/Migrations
+docker-compose up -d kibana
 ```
+
+Access Kabana:
+
+<http://0.0.0.0:5601/>
+
+Create Index Pattern:
+
+
