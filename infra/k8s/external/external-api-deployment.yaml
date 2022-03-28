@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-external-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo-external-api
+  template:
+    metadata:
+      labels:
+        app: todo-external-api
+    spec:
+      containers:
+      - name: todo-external-api
+        image: vitormoschetta/todo.external.api:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 7001
+        envFrom:
+        - configMapRef:
+            name: external-api-configmap
+        
