@@ -77,7 +77,7 @@ namespace Todo.IntegrationTest.Tests
             var response = await _httpClient.PostAsync(endpoint, content);
 
             // Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.True(response.IsSuccessStatusCode);
         }
 
         [Theory]
