@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-api-service
+spec:
+  type: ClusterIP
+  selector: 
+    app: todo-external-api
+  ports: 
+    - port: 7001          # ouve na porta 7001
