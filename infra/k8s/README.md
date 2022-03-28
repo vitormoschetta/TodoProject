@@ -1,3 +1,12 @@
+# K8s
+
+### Quick Start
+```
+sh cluster-init.sh
+```
+
+
+<br>
 
 
 ### Cluster
@@ -39,8 +48,15 @@ kubectl get nodes
 ### Mapear porta de um Service do Cluster para o HOST
 ```
 kubectl port-forward service/app-service 6002:6002
+kubectl port-forward service/kibana-service 5601:5601
 ```
-Acessar: <http://localhost:6002/>
+Acessar: 
+
+<http://localhost:6002/>
+<http://localhost:5601/>
+
+
+
 
 
 

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: elasticsearch-configmap
+data:  
+  xpack.security.enabled: "false"
+  discovery.type: single-node
