@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Todo.Api;
 using Todo.Domain.Commands.CreateCommands;
+using Todo.Domain.Commands.UpdateCommands;
 using Todo.Domain.Models;
 using Todo.IntegrationTest.Mocks;
 using Xunit;
@@ -22,23 +24,57 @@ namespace Todo.IntegrationTest.Tests
         {
             _factory = factory;
             _httpClient = _factory.CreateClient();
+            // Database has been populated for testing:
+            // Todo.IntegrationTest.Helpers.SeedDB: Task 01, Task 02 and Task 03 are created
+        }
+
+        [Theory]
+        [InlineData("/api/todoItem")]
+        public async Task GetAll_Endpoints_Return_Success(string endpoint)
+        {
+            // Arrange            
+
+            // Act
+            var response = await _httpClient.GetAsync(endpoint);
+            var todoItems = JsonConvert.DeserializeObject<IList<TodoItem>>(response.Content.ReadAsStringAsync().Result);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.True(todoItems.Any());
         }
 
 
         [Theory]
         [InlineData("/api/todoItem")]
-        public async Task Post_Endpoints_Return_Success(string url)
+        public async Task Get_Endpoints_ById_Return_Success(string endpoint)
         {
             // Arrange
-            var todoItem = new TodoItemCreateCommand()
-            {
-                Title = "Todo item",
-                Done = false
-            };
-            var content = new StringContent(JsonConvert.SerializeObject(todoItem), Encoding.UTF8, "application/json");
+            var id = Guid.Parse("ddffe2dc-b162-406d-8520-429043bd9b7c");
 
             // Act
-            var response = await _httpClient.PostAsync(url, content);
+            var response = await _httpClient.GetAsync($"{endpoint}/{id}");
+            var todoItem = JsonConvert.DeserializeObject<TodoItem>(response.Content.ReadAsStringAsync().Result);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal("Task 01", todoItem.Title);
+        }
+
+
+        [Theory]
+        [InlineData("/api/todoItem")]
+        public async Task Post_Endpoints_Return_Success(string endpoint)
+        {
+            // Arrange
+            var todoItemCreateCommand = new TodoItemCreateCommand()
+            {
+                Title = "task 04",
+                Done = false
+            };
+
+            // Act
+            var content = new StringContent(JsonConvert.SerializeObject(todoItemCreateCommand), Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync(endpoint, content);
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -46,14 +82,18 @@ namespace Todo.IntegrationTest.Tests
 
         [Theory]
         [InlineData("/api/todoItem")]
-        public async Task Post_Endpoints_Return_BadRequest(string url)
+        public async Task Post_Endpoints_Empty_Title_Return_BadRequest(string endpoint)
         {
             // Arrange
-            var todoItem = new TodoItemCreateCommand() { Title = "", Done = false };
-            var content = new StringContent(JsonConvert.SerializeObject(todoItem), Encoding.UTF8, "application/json");
+            var todoItemCreateCommand = new TodoItemCreateCommand()
+            {
+                Title = "",
+                Done = false
+            };
 
             // Act
-            var response = await _httpClient.PostAsync(url, content);
+            var content = new StringContent(JsonConvert.SerializeObject(todoItemCreateCommand), Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync(endpoint, content);
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -61,78 +101,52 @@ namespace Todo.IntegrationTest.Tests
 
         [Theory]
         [InlineData("/api/todoItem")]
-        public async Task Get_Endpoints_Return_Success(string url)
+        public async Task Put_Endpoints_Return_Success(string endpoint)
         {
-            // Arrange
-            var todoItem = new TodoItemCreateCommand() { Title = "Todo item", Done = false };
-            var content = new StringContent(JsonConvert.SerializeObject(todoItem), Encoding.UTF8, "application/json");
-            _ = await _httpClient.PostAsync(url, content);
-
-            // Act
-            var response = await _httpClient.GetAsync(url);
-            var todoItems = JsonConvert.DeserializeObject<IList<TodoItem>>(response.Content.ReadAsStringAsync().Result);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Equal(1, todoItems.Count);
-        }
-
-        [Theory]
-        [InlineData("/api/todoItem/100")]
-        public async Task Get_Endpoints_With_Parameter_Return_Success(string url)
-        {
-            // Arrange
-
-            // Act
-            var response = await _httpClient.GetAsync(url);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        }
-
-        [Theory]
-        [InlineData("/api/todoItem/100")]
-        public async Task Put_Endpoints_Return_Success(string url)
-        {
-            // Arrange
-            var todoItem = new TodoItem
+            // Arrange           
+            var todoItemUpdateCommand = new TodoItemUpdateCommand()
             {
-                Id = Guid.Parse("10e45e3a-968d-48f0-b585-17dd81bb540b"),
-                Title = "Todo item new",
+                Id = Guid.Parse("0afe7382-2ac0-4ddf-a2bd-432da680b924"),
+                Title = "Task 02 updated",
                 Done = true
             };
-            var content = new StringContent(JsonConvert.SerializeObject(todoItem), Encoding.UTF8, "application/json");
 
             // Act
-            var response = await _httpClient.PutAsync(url, content);
+            var content = new StringContent(JsonConvert.SerializeObject(todoItemUpdateCommand), Encoding.UTF8, "application/json");
+            var response = await _httpClient.PutAsync($"{endpoint}/{todoItemUpdateCommand.Id}", content);
+            var todoItemResponse = await _httpClient.GetAsync($"{endpoint}/{todoItemUpdateCommand.Id}");
+            var todoItem = JsonConvert.DeserializeObject<TodoItem>(todoItemResponse.Content.ReadAsStringAsync().Result);
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal("Task 02 updated", todoItem.Title);
         }
 
         [Theory]
-        [InlineData("/api/todoItem/10e45e3a-968d-48f0-b585-17dd81bb540b")]
-        public async Task Put_Endpoints_Return_BadRequest(string url)
+        [InlineData("/api/todoItem")]
+        public async Task Put_Endpoints_TodoItem_Id_Different_Return_BadRequest(string endpoint)
         {
             // Arrange
+            var id = Guid.Parse("10e45e3a-968d-48f0-b585-17dd81bb540b");
+
             var todoItem = new TodoItem()
             {
                 Id = Guid.NewGuid(),
                 Title = "Todo item new",
                 Done = true
             };
-            var content = new StringContent(JsonConvert.SerializeObject(todoItem), Encoding.UTF8, "application/json");
 
             // Act
-            var response = await _httpClient.PutAsync(url, content);
+            var content = new StringContent(JsonConvert.SerializeObject(todoItem), Encoding.UTF8, "application/json");
+            var response = await _httpClient.PutAsync($"{endpoint}/10e45e3a-968d-48f0-b585-17dd81bb540b", content);
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         [Theory]
-        [InlineData("/api/todoItem/7b9e3cb4-5027-4f55-9771-16c1624d5f55")]
-        public async Task Put_Endpoints_Return_NotFound(string url)
+        [InlineData("/api/todoItem")]
+        public async Task Put_Endpoints_TodoItem_Id_Does_Not_Exist_Return_NotFound(string endpoint)
         {
             // Arrange
             var todoItem = new TodoItem()
@@ -141,39 +155,27 @@ namespace Todo.IntegrationTest.Tests
                 Title = "Todo item new",
                 Done = true
             };
-            var content = new StringContent(JsonConvert.SerializeObject(todoItem), Encoding.UTF8, "application/json");
 
             // Act
-            var response = await _httpClient.PutAsync(url, content);
+            var content = new StringContent(JsonConvert.SerializeObject(todoItem), Encoding.UTF8, "application/json");
+            var response = await _httpClient.PutAsync($"{endpoint}/{todoItem.Id}", content);
 
             // Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 
         [Theory]
-        [InlineData("/api/todoItem/100")]
-        public async Task Delete_Endpoints_Return_Success(string url)
+        [InlineData("/api/todoItem")]
+        public async Task Delete_Endpoints_Return_Success(string endpoint)
         {
             // Arrange
+            var id = Guid.Parse("05670b31-6ae5-4251-be13-c6717449df3c");
 
             // Act
-            var response = await _httpClient.DeleteAsync(url);
+            var response = await _httpClient.DeleteAsync($"{endpoint}?id={id}");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        }
-
-        [Theory]
-        [InlineData("/api/todoItem/9999")]
-        public async Task Delete_Endpoints_Return_NotFound(string url)
-        {
-            // Arrange
-
-            // Act
-            var response = await _httpClient.DeleteAsync(url);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
     }
 }
