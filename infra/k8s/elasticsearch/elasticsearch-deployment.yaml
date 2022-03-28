@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-elasticsearch
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo-elasticsearch
+  template:
+    metadata:
+      labels:
+        app: todo-elasticsearch
+    spec:
+      containers:
+      - name: todo-elasticsearch
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.11.1
+        resources:
+          limits:
+            memory: "2Gi"
+            cpu: "2"
+        ports:
+        - containerPort: 9200
+        envFrom:
+        - configMapRef:
+            name: elasticsearch-configmap
+        

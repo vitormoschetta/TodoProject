@@ -1,26 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: todo-db
+  name: todo-kibana
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: todo-db
+      app: todo-kibana
   template:
     metadata:
       labels:
-        app: todo-db
+        app: todo-kibana
     spec:
       containers:
-      - name: todo-db
-        image: mysql:5.7        
+      - name: todo-kibana
+        image: docker.elastic.co/kibana/kibana:7.11.1
         resources:
           limits:
             memory: "512Mi"
             cpu: "1"
         ports:
-        - containerPort: 3306
+        - containerPort: 5601
         envFrom:
         - configMapRef:
-            name: db-configmap
+            name: kibana-configmap
+        
