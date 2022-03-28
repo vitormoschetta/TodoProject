@@ -50,7 +50,7 @@ services:
       - external
 
   external:
-    container_name: external.api
+    container_name: todo.external.api
     image: vitormoschetta/todo.external.api
     build:
       context: .
