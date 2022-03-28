@@ -7,5 +7,5 @@ data:
   DB_CONNECTION__USER: root
   DB_CONNECTION__PASSWORD: MySql2022
   DB_CONNECTION__DATABASE: "todoapidb"
-  Elasticsearch__Uri: "http://todo.elasticsearch:9200"
+  Elasticsearch__Uri: "http://elasticsearch-service:9200"
   ExternalApi__BaseAddress: "http://external-api-service:7001"
