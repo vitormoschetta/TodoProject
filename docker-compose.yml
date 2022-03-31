@@ -36,9 +36,7 @@ services:
       Elasticsearch__Uri: ${Elasticsearch__Uri}
       ExternalApi__BaseAddress: ${ExternalApi__BaseAddress}
       # ASPNETCORE_Kestrel__Certificates__Default__Password: ${ASPNETCORE_Kestrel__Certificates__Default__Password}
-      # ASPNETCORE_Kestrel__Certificates__Default__Path: ${ASPNETCORE_Kestrel__Certificates__Default__Path}
-    # volumes:
-    #   - ./src/Todo.Api/appsettings.DockerDevelopment.json:/public/appsettings.json
+      # ASPNETCORE_Kestrel__Certificates__Default__Path: ${ASPNETCORE_Kestrel__Certificates__Default__Path}    
     ports:
       - 6001:6001
     expose:

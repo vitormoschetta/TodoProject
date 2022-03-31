@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Todo.Domain.Contracts.Services.External;
 using Todo.Infrastructure.Database.Context;
 using Todo.IntegrationTest.Helpers;
 
@@ -16,16 +17,21 @@ namespace Todo.IntegrationTest.Mocks
         {
             builder.ConfigureServices(services =>
             {
-                var descriptor = services.SingleOrDefault(
-                    d => d.ServiceType ==
-                        typeof(DbContextOptions<AppDbContext>));
+                var databaseService = services.SingleOrDefault(
+                    d => d.ServiceType == typeof(DbContextOptions<AppDbContext>));
 
-                services.Remove(descriptor);
+                var externalApiService = services.SingleOrDefault(
+                    d => d.ServiceType == typeof(IExternalApi));
+
+                services.Remove(databaseService);
+                services.Remove(externalApiService);
 
                 services.AddDbContext<AppDbContext>(options =>
                 {
                     options.UseInMemoryDatabase("InMemoryDbForTesting");
                 });
+
+                services.AddHttpClient<IExternalApi, ExternalApiFake>();
 
                 var sp = services.BuildServiceProvider();
 
