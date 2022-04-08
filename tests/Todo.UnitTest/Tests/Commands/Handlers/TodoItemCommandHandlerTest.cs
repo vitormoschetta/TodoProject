@@ -8,7 +8,7 @@ using Todo.Domain.Commands.Handlers;
 using Todo.Domain.Commands.UpdateCommands;
 using Todo.Domain.Contracts.Commands.Handlers;
 using Todo.Domain.Contracts.Repositories;
-using Todo.Domain.Contracts.Services.External;
+using Todo.Domain.Contracts.Services;
 using Todo.Domain.Enums;
 using Todo.UnitTest.Mocks;
 using Xunit;
@@ -17,11 +17,11 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
 {
     public class TodoItemCommandHandlerTest
     {
-        private readonly ITodoItemRepository repository;
-        private readonly IUnitOfWork uow;
-        private readonly IExternalApi externalApi;
-        private readonly ILogger<TodoItemCommandHandler> logger;
-        private readonly ITodoItemCommandHandler handler;
+        private readonly ITodoItemRepository _repository;
+        private readonly IUnitOfWork _uow;
+        private readonly IMessageService _messageService;
+        private readonly ILogger<TodoItemCommandHandler> _logger;
+        private readonly ITodoItemCommandHandler _handler;
         private TodoItemCreateCommand createCommandNotInstantiated;
         private TodoItemDeleteCommand deleteCommandNotInstantiated;
         private TodoItemUpdateCommand updateCommandNotInstantiated;
@@ -29,11 +29,16 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
 
         public TodoItemCommandHandlerTest()
         {
-            repository = new TodoItemRepositoryFake();
-            uow = new UnitOfWorkFake(repository);
-            logger = new Logger<TodoItemCommandHandler>(new LoggerFactory());
-            externalApi = new ExternalApiFake();
-            handler = new TodoItemCommandHandler(uow, externalApi, logger);
+            _repository = new TodoItemRepositoryFake();
+            _uow = new UnitOfWorkFake(_repository);
+            _logger = new Logger<TodoItemCommandHandler>(new LoggerFactory());
+            _messageService = new MessageServiceFake();
+            _handler = new TodoItemCommandHandler(_uow, _messageService, _logger);
+
+            createCommandNotInstantiated = null;
+            deleteCommandNotInstantiated = null;
+            updateCommandNotInstantiated = null;
+            markAsDoneCommandNotInstantiated = null;
         }
 
         [Fact]
@@ -47,7 +52,7 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
             };
 
             // Act
-            var response = await handler.Handle(command);
+            var response = await _handler.Handle(command);
 
             // Assert
             Assert.True(response.Success, response.Message);
@@ -59,7 +64,7 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
             // Arrange            
 
             // Act
-            var response = await handler.Handle(createCommandNotInstantiated);
+            var response = await _handler.Handle(createCommandNotInstantiated);
 
             // Assert
             Assert.False(response.Success, response.Message);
@@ -73,7 +78,7 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
             var command = new TodoItemCreateCommand();
 
             // Act
-            var response = await handler.Handle(command);
+            var response = await _handler.Handle(command);
 
             // Assert
             Assert.False(response.Success, response.Message);
@@ -91,7 +96,7 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
             };
 
             // Act
-            var response = await handler.Handle(command);
+            var response = await _handler.Handle(command);
 
             // Assert
             Assert.False(response.Success, response.Message);
@@ -109,7 +114,7 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
             };
 
             // Act
-            var response = await handler.Handle(command);
+            var response = await _handler.Handle(command);
 
             // Assert
             Assert.False(response.Success, response.Message);
@@ -126,7 +131,7 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
             };
 
             // Act
-            var response = await handler.Handle(command);
+            var response = await _handler.Handle(command);
 
             // Assert
             Assert.True(response.Success, response.Message);
@@ -139,7 +144,7 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
             // Arrange            
 
             // Act
-            var response = await handler.Handle(deleteCommandNotInstantiated);
+            var response = await _handler.Handle(deleteCommandNotInstantiated);
 
             // Assert
             Assert.False(response.Success, response.Message);
@@ -156,7 +161,7 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
             };
 
             // Act
-            var response = await handler.Handle(command);
+            var response = await _handler.Handle(command);
 
             // Assert
             Assert.False(response.Success, response.Message);
@@ -170,7 +175,7 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
             var command = new TodoItemDeleteCommand();
 
             // Act
-            var response = await handler.Handle(command);
+            var response = await _handler.Handle(command);
 
             // Assert
             Assert.False(response.Success, response.Message);
@@ -189,7 +194,7 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
             };
 
             // Act
-            var response = await handler.Handle(command);
+            var response = await _handler.Handle(command);
 
             // Assert
             Assert.True(response.Success, response.Message);
@@ -202,7 +207,7 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
             // Arrange            
 
             // Act
-            var response = await handler.Handle(updateCommandNotInstantiated);
+            var response = await _handler.Handle(updateCommandNotInstantiated);
 
             // Assert
             Assert.False(response.Success, response.Message);
@@ -221,7 +226,7 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
             };
 
             // Act
-            var response = await handler.Handle(command);
+            var response = await _handler.Handle(command);
 
             // Assert
             Assert.False(response.Success, response.Message);
@@ -235,7 +240,7 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
             var command = new TodoItemUpdateCommand();
 
             // Act
-            var response = await handler.Handle(command);
+            var response = await _handler.Handle(command);
 
             // Assert
             Assert.False(response.Success, response.Message);
@@ -252,7 +257,7 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
             };
 
             // Act
-            var response = await handler.Handle(command);
+            var response = await _handler.Handle(command);
 
             // Assert
             Assert.True(response.Success, response.Message);
@@ -265,7 +270,7 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
             // Arrange            
 
             // Act
-            var response = await handler.Handle(markAsDoneCommandNotInstantiated);
+            var response = await _handler.Handle(markAsDoneCommandNotInstantiated);
 
             // Assert
             Assert.False(response.Success, response.Message);
@@ -282,7 +287,7 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
             };
 
             // Act
-            var response = await handler.Handle(command);
+            var response = await _handler.Handle(command);
 
             // Assert
             Assert.False(response.Success, response.Message);
@@ -296,7 +301,7 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
             var command = new TodoItemMarkAsDoneCommand();
 
             // Act
-            var response = await handler.Handle(command);
+            var response = await _handler.Handle(command);
 
             // Assert
             Assert.False(response.Success, response.Message);
@@ -307,17 +312,17 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
         public async Task When_updating_all_tasks_to_Done()
         {
             // Arrange
-            var isThereTaskNotDone = repository.Query().Where(x => x.Done == false).Any();
+            var isThereTaskNotDone = _repository.Query().Where(x => x.Done == false).Any();
 
             // Act
-            await handler.UpdateAllToDone();
+            await _handler.UpdateAllToDone();
 
             // Assert
             // Como testar um método sem saída/retorno? Verificando seus efeitos colaterais (side effects)
             // Primeiro verificamos se existe pelo menos uma task não concluída (Done == false)
             // Após a execução do Handler, verificamos que NÃO existe nenhuma task com status de não concluída (Done == true)
             Assert.True(isThereTaskNotDone, "Para um teste eficaz é necessário que exista pelo menos uma tarefa não concluída (Done == false) no repositório Fake");
-            Assert.False(repository.Query().Where(x => x.Done == false).Any(), "Todos os itens devem ser atualizados para o status de concluído (Done)");
+            Assert.False(_repository.Query().Where(x => x.Done == false).Any(), "Todos os itens devem ser atualizados para o status de concluído (Done)");
         }
     }
 }

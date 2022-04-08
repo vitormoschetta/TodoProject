@@ -1,6 +1,4 @@
 using System;
-using System.Text.Json;
-using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Todo.Domain.Commands.CreateCommands;
@@ -9,8 +7,9 @@ using Todo.Domain.Commands.Responses;
 using Todo.Domain.Commands.UpdateCommands;
 using Todo.Domain.Contracts.Commands.Handlers;
 using Todo.Domain.Contracts.Repositories;
-using Todo.Domain.Contracts.Services.External;
+using Todo.Domain.Contracts.Services;
 using Todo.Domain.Enums;
+using Todo.Domain.Helpers;
 using Todo.Domain.Models;
 
 namespace Todo.Domain.Commands.Handlers
@@ -18,14 +17,14 @@ namespace Todo.Domain.Commands.Handlers
     public class TodoItemCommandHandler : ITodoItemCommandHandler
     {
         private readonly IUnitOfWork _uow;
-        private readonly ILogger _logger;
-        private readonly IExternalApi _externalApi;
+        private readonly ILogger _logger;        
+        private readonly IMessageService _messageService;
 
-        public TodoItemCommandHandler(IUnitOfWork uow, IExternalApi externalApi, ILogger<TodoItemCommandHandler> logger)
+        public TodoItemCommandHandler(IUnitOfWork uow, IMessageService messageService, ILogger<TodoItemCommandHandler> logger)
         {
             _uow = uow;
-            _externalApi = externalApi;
             _logger = logger;
+            _messageService = messageService;
         }
 
         public async Task<CommandResponse> Handle(TodoItemCreateCommand command)
@@ -50,23 +49,22 @@ namespace Todo.Domain.Commands.Handlers
                     Done = command.Done
                 };
 
-                var httpResponse = await _externalApi.PostTodoItem(todoItem);
-
-                if (httpResponse != HttpStatusCode.OK)
-                {
-                    return new CommandResponse("não foi possível enviar para o serviço externo", EOutputType.Failure);
-                }
-
                 await _uow.TodoItem.Add(todoItem);
                 await _uow.Commit();
 
-                // Todo: add logging tags to the logger
-                _logger.LogInformation($"TodoItem Created: {JsonSerializer.Serialize(todoItem)}");
+                var message = SerializationManager.SerializeDomainEventToJson(EMessageType.Created, todoItem);
+
+                // Utilizando um serviço de fila tornamos a comunicação com um serviço externo assíncrono.
+                // Ou seja, não seremos mais afetados pela indisponibilidade de serviços externos.
+                _messageService.SendMessage(message);
+
+                _logger.LogInformation(message);
 
                 return new CommandResponse("Created!");
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 return new CommandResponse(ex);
             }
         }
@@ -91,22 +89,20 @@ namespace Todo.Domain.Commands.Handlers
 
                 todoItem.Update(command.Title, command.Done);
 
-                var httpResponse = await _externalApi.PutTodoItem(todoItem);
-
-                if (httpResponse != HttpStatusCode.OK)
-                {
-                    return new CommandResponse("não foi possível enviar para o serviço externo", EOutputType.Failure);
-                }
-
                 await _uow.TodoItem.Update(todoItem);
                 await _uow.Commit();
 
-                _logger.LogInformation($"TodoItem Updated: {JsonSerializer.Serialize(todoItem)}");
+                var message = SerializationManager.SerializeDomainEventToJson(EMessageType.Updated, todoItem);
+
+                _messageService.SendMessage(message);
+
+                _logger.LogInformation(message);
 
                 return new CommandResponse("Updated!");
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 return new CommandResponse(ex);
             }
         }
@@ -129,22 +125,20 @@ namespace Todo.Domain.Commands.Handlers
                     return new CommandResponse("TodoItem not found", EOutputType.NotFound);
                 }
 
-                var httpResponse = await _externalApi.DeleteTodoItem(todoItem);
-
-                if (httpResponse != HttpStatusCode.OK)
-                {
-                    return new CommandResponse("não foi possível enviar para o serviço externo", EOutputType.Failure);
-                }
-
                 await _uow.TodoItem.Delete(todoItem);
                 await _uow.Commit();
 
-                _logger.LogInformation($"TodoItem Deleted: {JsonSerializer.Serialize(todoItem)}");
+                var message = SerializationManager.SerializeDomainEventToJson(EMessageType.Deleted, todoItem);
+
+                _messageService.SendMessage(message);
+
+                _logger.LogInformation(message);
 
                 return new CommandResponse("Deleted!");
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 return new CommandResponse(ex);
             }
         }
@@ -172,10 +166,17 @@ namespace Todo.Domain.Commands.Handlers
                 await _uow.TodoItem.Update(todoItem);
                 await _uow.Commit();
 
+                var message = SerializationManager.SerializeDomainEventToJson(EMessageType.Updated, todoItem);
+
+                _messageService.SendMessage(message);
+
+                _logger.LogInformation(message);
+
                 return new CommandResponse("Mark as Done!");
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 return new CommandResponse(ex);
             }
         }
@@ -185,10 +186,17 @@ namespace Todo.Domain.Commands.Handlers
             try
             {
                 await _uow.TodoItem.UpdateAllToDone();
+                await _uow.Commit();
+
+                var message = SerializationManager.SerializeDomainEventToJson(EMessageType.UpdateAll);
+
+                _messageService.SendMessage(message);
+
+                _logger.LogInformation(message);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                _logger.LogError(ex, ex.Message);                
             }
         }
     }

@@ -7,9 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Todo.Api.Configurations;
-using Todo.Domain.Contracts.Services.External;
 using Todo.Infrastructure.Database.Context;
-using Todo.Infrastructure.Services;
 
 namespace Todo.Api
 {
@@ -31,8 +29,8 @@ namespace Todo.Api
             services.AddRepositories();
             services.AddCommandHandlers();
             services.AddQueryHandlers();
-            services.AddDatabase(Configuration);
-            services.AddHttpClient<IExternalApi, ExternalApi>();
+            services.AddServices();
+            services.AddDatabase(Configuration);            
         }
 
 

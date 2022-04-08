@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: todo-external-api
+  name: todo-rabbitmq
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: todo-external-api
+      app: todo-rabbitmq
   template:
     metadata:
       labels:
-        app: todo-external-api
+        app: todo-rabbitmq
     spec:
       containers:
-      - name: todo-external-api
-        image: vitormoschetta/todo.external.api:latest
+      - name: todo-rabbitmq
+        image: rabbitmq:3
         resources:
           limits:
-            memory: "128Mi"
+            memory: "512Mi"
             cpu: "500m"
         ports:
-        - containerPort: 7001
+        - containerPort: 5672
         envFrom:
         - configMapRef:
-            name: external-api-configmap
+            name: rabbitmq-configmap
         

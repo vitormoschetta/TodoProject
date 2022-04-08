@@ -22,15 +22,16 @@
       "dotnetRunMessages": "true",
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "DB_CONNECTION__HOST": "localhost",
-        "DB_CONNECTION__USER": "root",
-        "DB_CONNECTION__PASSWORD": "MySql2022",
-        "DB_CONNECTION__DATABASE": "todoapidb",
-        "Elasticsearch__Uri":"http://localhost:9200",
-        "ExternalApi__BaseAddress":"http://localhost:7001"
+        "ASPNETCORE_URLS": "http://*:6001",
+        "DatabaseConnection__Host": "localhost",
+        "DatabaseConnection__Username": "root",
+        "DatabaseConnection__Password": "MySql2022",
+        "DatabaseConnection__Database": "todoapidb",
+        "RabbitMQ__Host": "localhost",
+        "RabbitMQ__Queue": "TodoQueue",
+        "Elasticsearch__Uri":"http://localhost:9200"
       }
     }
   }

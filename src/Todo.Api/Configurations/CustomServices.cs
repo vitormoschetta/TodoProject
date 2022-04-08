@@ -3,8 +3,10 @@ using Todo.Domain.Commands.Handlers;
 using Todo.Domain.Contracts.Commands.Handlers;
 using Todo.Domain.Contracts.Queries.Handlers;
 using Todo.Domain.Contracts.Repositories;
+using Todo.Domain.Contracts.Services;
 using Todo.Domain.Queries.Handlers;
 using Todo.Infrastructure.Database.Repositories;
+using Todo.Infrastructure.Services;
 
 namespace Todo.Api.Configurations
 {
@@ -24,6 +26,11 @@ namespace Todo.Api.Configurations
         public static void AddQueryHandlers(this IServiceCollection services)
         {
             services.AddScoped<ITodoItemQueryHandler, TodoItemQueryHandler>();
+        }
+
+        public static void AddServices(this IServiceCollection services)
+        {            
+            services.AddSingleton<IMessageService, MessageService>();
         }
     }
 }

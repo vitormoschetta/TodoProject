@@ -2,30 +2,37 @@
 
 ## Quick start App
 ```
-docker-compose up -d app
+docker-compose up -d --build app
 ```
 
-Access Todo.Api:
+Access `Todo.App`: <http://0.0.0.0:6002/>
 
-<http://0.0.0.0:6001/>
+Access `Todo.Api`: <http://0.0.0.0:6001/>
 
-
-Access Todo.App:
-
-<http://0.0.0.0:6002/>
 
 
 <br>
 
 
-## quick start Elastic:
+
+## quick start RabbitMQ
+
+<https://www.rabbitmq.com/getstarted.html>
+
+<https://github.com/vitormoschetta/RabbitMQ>
+
+
+
+<br>
+
+
+
+## quick start Elastic
 ```
 docker-compose up -d kibana
 ```
 
-Access Kabana:
-
-<http://0.0.0.0:5601/>
+Access Kabana: <http://0.0.0.0:5601/>
 
 
 Create Index Pattern:
@@ -36,5 +43,7 @@ Create Index Pattern:
 Kibana Query Language:
 
 <https://www.elastic.co/guide/en/kibana/7.17/kuery-query.html>
+
+
 
 

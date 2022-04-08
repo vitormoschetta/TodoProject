@@ -14,13 +14,15 @@ services:
       context: .
       dockerfile: infra/docker/Todo.App/Dockerfile    
     environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://*:6002
       API_URL_CONNECTION: "http://todo.api:6001/api/"
     ports:
       - 6002:6002
     networks:
       - todonetwork
     depends_on:
-      - api      
+      - api
 
   api:
     container_name: todo.api
@@ -29,38 +31,24 @@ services:
       context: .
       dockerfile: infra/docker/Todo.Api/Dockerfile
     environment:
-      DB_CONNECTION__HOST: ${DB_CONNECTION__HOST}
-      DB_CONNECTION__USER: ${DB_CONNECTION__USER}
-      DB_CONNECTION__PASSWORD: ${DB_CONNECTION__PASSWORD}
-      DB_CONNECTION__DATABASE: ${DB_CONNECTION__DATABASE}
-      Elasticsearch__Uri: ${Elasticsearch__Uri}
-      ExternalApi__BaseAddress: ${ExternalApi__BaseAddress}
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://*:6001
+      DatabaseConnection__Host: ${DatabaseConnection__Host}
+      DatabaseConnection__Username: ${DatabaseConnection__Username}
+      DatabaseConnection__Password: ${DatabaseConnection__Password}
+      DatabaseConnection__Database: ${DatabaseConnection__Database}
+      RabbitMQ__Host: ${RabbitMQ__Host}
+      RabbitMQ__Queue: ${RabbitMQ__Queue}
+      Elasticsearch__Uri: ${Elasticsearch__Uri}      
       # ASPNETCORE_Kestrel__Certificates__Default__Password: ${ASPNETCORE_Kestrel__Certificates__Default__Password}
       # ASPNETCORE_Kestrel__Certificates__Default__Path: ${ASPNETCORE_Kestrel__Certificates__Default__Path}    
     ports:
       - 6001:6001
-    expose:
-      - 6001
     networks:
       - todonetwork
     depends_on:
       - db
-      - external
-
-  external:
-    container_name: todo.external.api
-    image: vitormoschetta/todo.external.api
-    build:
-      context: .
-      dockerfile: infra/docker/External.Api/Dockerfile
-    environment:
-      ASPNETCORE_URLS: "http://*:7001"    
-    ports:
-      - 7001:7001
-    expose:
-      - 7001
-    networks:
-      - todonetwork    
+      - rabbitmq 
 
   db:
     container_name: todo.api.db
@@ -72,6 +60,17 @@ services:
       - ./infra/docker/MySql/:/tmp/seeds/
     ports:
       - "3306:3306"  
+    networks:
+      - todonetwork
+
+  rabbitmq:
+    container_name: todo.rabbitmq
+    image: rabbitmq:3
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - 5672:5672
+      - 15672:15672
     networks:
       - todonetwork
 

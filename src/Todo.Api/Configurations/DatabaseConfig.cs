@@ -12,10 +12,10 @@ namespace Todo.Api.Configurations
         {
             var dbConnection = new
             {
-                Host = Configuration["DB_CONNECTION:HOST"],
-                User = Configuration["DB_CONNECTION:USER"],
-                Pass = Configuration["DB_CONNECTION:PASSWORD"],
-                Name = Configuration["DB_CONNECTION:DATABASE"]
+                Host = Configuration["DatabaseConnection:Host"],
+                User = Configuration["DatabaseConnection:Username"],
+                Pass = Configuration["DatabaseConnection:Password"],
+                Name = Configuration["DatabaseConnection:Database"]
             };
 
             var connectionString =
