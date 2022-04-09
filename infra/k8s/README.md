@@ -1,8 +1,20 @@
 # K8s
 
 ### Quick Start
+
+Init cluster:
 ```
 sh cluster-init.sh
+```
+
+expose `todo.app` port:
+```
+kubectl port-forward service/app-service 6002:6002 
+```
+
+expose `todo.rabbitmq` port:
+```
+kubectl port-forward service/rabbitmq-service 5672:5672
 ```
 
 

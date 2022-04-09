@@ -3,4 +3,6 @@ kind: ConfigMap
 metadata:
   name: app-configmap
 data:
-  API_URL_CONNECTION: "http://api-service:6001/api/"
+  ASPNETCORE_ENVIRONMENT: Production
+  ASPNETCORE_URLS: http://*:6002
+  API_URL_CONNECTION: "http://api-service:6001/api/"  

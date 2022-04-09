@@ -6,12 +6,19 @@ kind create cluster --name todo-project
 
 
 
+
+echo "************************************* Creating RabbitMQ ************************************"
+kubectl apply -f rabbitmq/
+
+
+
 echo "**************************** Creating Elasticsearch and Kibana ****************************"
 kubectl apply -f elasticsearch/
 
 sleep 5
 
 kubectl apply -f kibana/
+
 
 
 
@@ -24,5 +31,3 @@ sleep 5
 kubectl apply -f api/
 
 kubectl apply -f app/
-
-kubectl apply -f external/

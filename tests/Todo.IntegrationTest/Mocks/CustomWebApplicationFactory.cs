@@ -1,11 +1,10 @@
-using System;
 using System.Linq;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Todo.Domain.Contracts.Services.External;
+using Todo.Domain.Contracts.Services;
 using Todo.Infrastructure.Database.Context;
 using Todo.IntegrationTest.Helpers;
 
@@ -20,18 +19,18 @@ namespace Todo.IntegrationTest.Mocks
                 var databaseService = services.SingleOrDefault(
                     d => d.ServiceType == typeof(DbContextOptions<AppDbContext>));
 
-                var externalApiService = services.SingleOrDefault(
-                    d => d.ServiceType == typeof(IExternalApi));
+                var messageService = services.SingleOrDefault(
+                    d => d.ServiceType == typeof(IMessageService));
 
                 services.Remove(databaseService);
-                services.Remove(externalApiService);
+                services.Remove(messageService);
 
                 services.AddDbContext<AppDbContext>(options =>
                 {
                     options.UseInMemoryDatabase("InMemoryDbForTesting");
                 });
-
-                services.AddHttpClient<IExternalApi, ExternalApiFake>();
+                
+                services.AddSingleton<IMessageService, MessageServiceFake>();
 
                 var sp = services.BuildServiceProvider();
 
