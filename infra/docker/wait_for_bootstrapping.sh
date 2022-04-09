@@ -7,9 +7,9 @@
 
 set -e
 
-echo "HOST: ${DB_CONNECTION__HOST}"
+echo "HOST: ${DatabaseConnection__Host}"
 
-while ! mysql -h ${DB_CONNECTION__HOST} -u ${DB_CONNECTION__USER} -p${DB_CONNECTION__PASSWORD} ${DB_CONNECTION__DATABASE} -e ";" ; do
+while ! mysql -h ${DatabaseConnection__Host} -u ${DatabaseConnection__Username} -p${DatabaseConnection__Password} ${DatabaseConnection__Database} -e ";" ; do
   >&2 echo "Database is unavailable - sleeping"
   sleep 1
 done

@@ -8,5 +8,5 @@ spec:
     app: todo-kibana
   ports: 
     - port: 5601          # ouve na porta 5601
-      targetPort: 5601    # redireciona para o POD que ouve na porta 6002
+      targetPort: 5601    # redireciona para o POD que ouve na porta 5601
       nodePort: 30001     # porta para acesso externo - de 30000 a 32767

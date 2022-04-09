@@ -8,7 +8,4 @@ FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine
 WORKDIR /public
 COPY --from=build /public .
 
-ARG API_URL_CONNECTION
-ENV API_URL_CONNECTION=$API_URL_CONNECTION
-
 ENTRYPOINT ["/usr/bin/dotnet", "/public/Todo.App.dll"]

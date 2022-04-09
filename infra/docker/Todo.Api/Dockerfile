@@ -10,15 +10,6 @@ FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}
 WORKDIR /public
 COPY --from=build /public .
 
-ARG DB_CONNECTION__HOST
-ARG DB_CONNECTION__USER
-ARG DB_CONNECTION__PASSWORD
-ARG DB_CONNECTION__DATABASE
-ENV DB_CONNECTION__HOST=$DB_CONNECTION__HOST
-ENV DB_CONNECTION__USER=$DB_CONNECTION__USER
-ENV DB_CONNECTION__PASSWORD=$DB_CONNECTION__PASSWORD
-ENV DB_CONNECTION__DATABASE=$DB_CONNECTION__DATABASE
-
 # Instala MySql/MariaDb client, útil para o scrip 'wait_for_bootstrapping.sh'
 RUN apt-get update && apt-get install -y mariadb-client && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
