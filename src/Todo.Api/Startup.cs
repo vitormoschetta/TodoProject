@@ -52,12 +52,9 @@ namespace Todo.Api
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TodoApi v1"));
 
-            if (context.Database.IsRelational())
+            if (context.Database.IsRelational() && context.Database.GetPendingMigrations().Any())
             {
-                if (context.Database.GetPendingMigrations().Any())
-                {
-                    context.Database.Migrate();
-                }
+                context.Database.Migrate();
             }
 
             // app.UseHttpsRedirection();
