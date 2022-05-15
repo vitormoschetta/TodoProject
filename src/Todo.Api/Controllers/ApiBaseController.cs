@@ -18,20 +18,9 @@ namespace Todo.Api.Controllers
                 EOutputType.Success => Ok(commandResponse),
                 EOutputType.InvalidInput => BadRequest(commandResponse),
                 EOutputType.BusinessValidation => BadRequest(commandResponse),
-                EOutputType.NotFound => NotFound(commandResponse),
-                EOutputType.IntegrationError => BadRequest(commandResponse),
+                EOutputType.NotFound => NotFound(commandResponse),                
                 _ => StatusCode(500, commandResponse.Message),
             };
         }
-
-        private object MapTo(CommandResponse commandResponse)
-        {
-            return new
-            {
-                success = commandResponse.Success,
-                data = commandResponse.Data,
-                message = commandResponse.Message
-            };
-        }     
     }
 }
