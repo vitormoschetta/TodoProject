@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Todo.Api.Configurations;
+using Todo.Api.Middlewares;
 using Todo.Infrastructure.Database.Context;
 
 namespace Todo.Api
@@ -30,7 +31,7 @@ namespace Todo.Api
             services.AddCommandHandlers();
             services.AddQueryHandlers();
             services.AddServices();
-            services.AddDatabase(Configuration);            
+            services.AddDatabase(Configuration);
         }
 
 
@@ -46,6 +47,8 @@ namespace Todo.Api
                 app.UseExceptionHandler("/Error");
                 // app.UseHsts();
             }
+
+            app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseSerilogRequestLogging();
 

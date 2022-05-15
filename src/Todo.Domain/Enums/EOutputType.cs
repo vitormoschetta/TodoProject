@@ -2,11 +2,10 @@ namespace Todo.Domain.Enums
 {
     public enum EOutputType
     {
-        Success = 1,
+        Success,
         InvalidInput,
         BusinessValidation,
         Failure,
-        NotFound,
-        IntegrationError
+        NotFound        
     }
 }
