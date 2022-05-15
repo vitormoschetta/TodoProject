@@ -59,16 +59,15 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
         }
 
         [Fact]
-        public async Task When_Create_TodoItem_With_Not_Instance_CreateCommand_Returns_Unsuccessfully()
+        public Task When_Create_TodoItem_With_Not_Instance_CreateCommand_Returns_Unsuccessfully()
         {
             // Arrange            
 
-            // Act
-            var response = await _handler.Handle(createCommandNotInstantiated);
+            // Act            
 
             // Assert
-            Assert.False(response.Success, response.Message);
-            Assert.Equal(EOutputType.Failure, response.OutputType);
+            Assert.ThrowsAsync<Exception>(async () => await _handler.Handle(createCommandNotInstantiated));
+            return Task.CompletedTask;
         }
 
         [Fact]
@@ -139,16 +138,15 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
         }
 
         [Fact]
-        public async Task When_trying_to_delete_TodoItem_With_Not_Instance_DeleteCommand_Returns_Unsuccessfully()
+        public Task When_trying_to_delete_TodoItem_With_Not_Instance_DeleteCommand_Returns_Unsuccessfully()
         {
             // Arrange            
 
-            // Act
-            var response = await _handler.Handle(deleteCommandNotInstantiated);
+            // Act            
 
-            // Assert
-            Assert.False(response.Success, response.Message);
-            Assert.Equal(EOutputType.Failure, response.OutputType);
+            // Assert            
+            Assert.ThrowsAsync<Exception>(async () => await _handler.Handle(deleteCommandNotInstantiated));
+            return Task.CompletedTask;
         }
 
         [Fact]
@@ -202,16 +200,15 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
         }
 
         [Fact]
-        public async Task When_trying_to_update_TodoItem_With_Not_Instance_UpdateCommand_Returns_Unsuccessfully()
+        public Task When_trying_to_update_TodoItem_With_Not_Instance_UpdateCommand_Returns_Unsuccessfully()
         {
             // Arrange            
 
-            // Act
-            var response = await _handler.Handle(updateCommandNotInstantiated);
+            // Act            
 
-            // Assert
-            Assert.False(response.Success, response.Message);
-            Assert.Equal(EOutputType.Failure, response.OutputType);
+            // Assert            
+            Assert.ThrowsAsync<Exception>(async () => await _handler.Handle(updateCommandNotInstantiated));
+            return Task.CompletedTask;
         }
 
         [Fact]
@@ -265,16 +262,15 @@ namespace Todo.UnitTest.Tests.Commands.Handlers
         }
 
         [Fact]
-        public async Task When_trying_to_MarkAdDone_TodoItem_With_Not_Instance_UpdateCommand_Returns_Unsuccessfully()
+        public Task When_trying_to_MarkAdDone_TodoItem_With_Not_Instance_UpdateCommand_Returns_Unsuccessfully()
         {
             // Arrange            
 
-            // Act
-            var response = await _handler.Handle(markAsDoneCommandNotInstantiated);
+            // Act            
 
             // Assert
-            Assert.False(response.Success, response.Message);
-            Assert.Equal(EOutputType.Failure, response.OutputType);
+            Assert.ThrowsAsync<Exception>(async () => await _handler.Handle(markAsDoneCommandNotInstantiated));
+            return Task.CompletedTask;
         }
 
         [Fact]
