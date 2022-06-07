@@ -35,15 +35,25 @@ docker-compose up -d kibana
 Access Kabana: <http://0.0.0.0:5601/>
 
 
-Create Index Pattern:
+#### Enable filebeat to send logs
 
-<https://medium.com/@vitormoschetta/visualizando-logs-com-kibana-hands-on-421fce9a7618>
+No `filebeat.yml` setamos o path para leitura de logs de todos os arquivos de logs do Docker:
+```
+/var/lib/docker/containers/*/*.log
+```
 
+Change permissions:
+```
+sudo chown root ./infra/docker/filebeat/filebeat.yml
+sudo chmod go-w ./infra/docker/filebeat/filebeat.yml
+```
 
-Kibana Query Language:
+Container Up:
+```
+docker-compose up -d filebeat
+```
 
-<https://www.elastic.co/guide/en/kibana/7.17/kuery-query.html>
-
-
-
-
+Quando o filebeat está lendo logs do container docker, é possível, no Kibana, filtrar os logos pelo nome do container:
+```
+container.name : todo.api
+```
