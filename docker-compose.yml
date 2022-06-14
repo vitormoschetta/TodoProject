@@ -72,23 +72,24 @@ services:
       - 5672:5672
       - 15672:15672
     networks:
-      - todonetwork
+      - todonetwork  
 
   elasticsearch:
     container_name: todo.elasticsearch
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.2.2
     ports:
       - 9200:9200
       - 9300:9300
     environment:      
       - xpack.security.enabled=false
       - discovery.type=single-node
+    mem_limit: 5073741824
     networks:
-      - todonetwork 
+      - todonetwork
 
   kibana:
     container_name: todo.kibana
-    image: docker.elastic.co/kibana/kibana:7.11.1
+    image: docker.elastic.co/kibana/kibana:8.2.2
     ports:
       - 5601:5601
     environment:
@@ -97,4 +98,31 @@ services:
       - todonetwork
     depends_on:
       - elasticsearch
-   
+
+  logstash:
+    container_name: todo.logstash
+    image: docker.elastic.co/logstash/logstash:8.2.2
+    ports:
+      - 5044:5044
+    command: logstash -f /etc/logstash/conf.d/logstash.conf
+    volumes:
+      - ./infra/docker/logstash/logstash.conf:/etc/logstash/conf.d/logstash.conf:ro      
+    environment:
+      - ELASTICSEARCH_HOSTS=http://todo.elasticsearch:9200
+      - xpack.monitoring.elasticsearch.hosts=["http://todo.elasticsearch:9200"]
+    networks:
+      - todonetwork
+    depends_on:
+      - elasticsearch
+
+  filebeat:
+    container_name: todo.filebeat
+    image: docker.elastic.co/beats/filebeat:8.2.2
+    user: root
+    network_mode: host
+    volumes:
+      - ./infra/docker/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /var/lib/docker:/var/lib/docker:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - logstash
