@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Todo.Domain.Models;
+using Todo.Domain.Entities;
 
 namespace Todo.Infrastructure.Database.Configurations
 {

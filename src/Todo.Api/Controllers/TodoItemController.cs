@@ -1,15 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Todo.Domain.Commands.CreateCommands;
-using Todo.Domain.Commands.DeleteCommands;
-using Todo.Domain.Commands.Responses;
-using Todo.Domain.Commands.UpdateCommands;
-using Todo.Domain.Contracts.Commands.Handlers;
-using Todo.Domain.Contracts.Queries.Handlers;
-using Todo.Domain.Enums;
-using Todo.Domain.Models;
+using Todo.Application.Commands.Requests;
+using Todo.Application.Commands.Responses;
+using Todo.Application.Contracts.Commands.Handlers;
+using Todo.Application.Contracts.Queries.Handlers;
+using Todo.Application.Enums;
+using Todo.Application.Queries.Responses;
 
 namespace Todo.Api.Controllers
 {
@@ -28,52 +23,52 @@ namespace Todo.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<CommandResponse>> Create([FromBody] TodoItemCreateCommand command)
+        public async Task<ActionResult<GenericResponse>> Create([FromBody] CreateTodoItemRequest request)
         {
-            var response = await _commandHandler.Handle(command);
+            var response = await _commandHandler.Handle(request);
 
-            return CustomResponse(response);
+            return StatusCodeResponse(response);
         }
 
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<CommandResponse>> Update(Guid id, [FromBody] TodoItemUpdateCommand command)
+        public async Task<ActionResult<GenericResponse>> Update(Guid id, [FromBody] UpdateTodoItemRequest command)
         {
             if (id != command.Id)
             {
-                return CustomResponse(new CommandResponse("Invalid ID", EOutputType.InvalidInput));
+                return StatusCodeResponse(new GenericResponse("Invalid ID", EStatusResponse.BadRequest));
             }
 
             var response = await _commandHandler.Handle(command);
 
-            return CustomResponse(response);
+            return StatusCodeResponse(response);
         }
 
 
         [HttpDelete()]
-        public async Task<ActionResult<CommandResponse>> Delete([FromQuery] TodoItemDeleteCommand command)
+        public async Task<ActionResult<GenericResponse>> Delete([FromQuery] DeleteTodoItemRequest command)
         {
             var response = await _commandHandler.Handle(command);
 
-            return CustomResponse(response);
+            return StatusCodeResponse(response);
         }
 
 
         [HttpGet()]
-        public async Task<IEnumerable<TodoItem>> GetAll()
+        public async Task<IEnumerable<TodoItemResponse>> GetAll()
         {
             return await _queryHandler.GetAll();
         }
 
 
         [HttpGet("{id}")]
-        public async Task<TodoItem> GetById(Guid id)
+        public async Task<ActionResult<TodoItemResponse>> GetById(Guid id)
         {
             return await _queryHandler.GetById(id);
         }
 
         [HttpGet("GetByTitle/{title}")]
-        public async Task<TodoItem> GetByTitle(string title)
+        public async Task<ActionResult<TodoItemResponse>> GetByTitle(string title)
         {
             return await _queryHandler.Get(x => x.Title == title);
         }

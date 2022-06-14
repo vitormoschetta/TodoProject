@@ -7,7 +7,7 @@ Init cluster:
 sh cluster-init.sh
 ```
 
-expose `todo.app` port:
+expose `todo.ui.blazor` port:
 ```
 kubectl port-forward service/app-service 6002:6002 
 ```

@@ -1,10 +1,9 @@
-using Microsoft.Extensions.DependencyInjection;
-using Todo.Domain.Commands.Handlers;
-using Todo.Domain.Contracts.Commands.Handlers;
-using Todo.Domain.Contracts.Queries.Handlers;
-using Todo.Domain.Contracts.Repositories;
-using Todo.Domain.Contracts.Services;
-using Todo.Domain.Queries.Handlers;
+using Todo.Application.Commands.Handlers;
+using Todo.Application.Contracts.Commands.Handlers;
+using Todo.Application.Contracts.Queries.Handlers;
+using Todo.Application.Contracts.Repositories;
+using Todo.Application.Contracts.Services;
+using Todo.Application.Queries.Handlers;
 using Todo.Infrastructure.Database.Repositories;
 using Todo.Infrastructure.Services;
 

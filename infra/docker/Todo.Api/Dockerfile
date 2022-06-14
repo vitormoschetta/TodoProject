@@ -1,4 +1,4 @@
-ARG  DOTNET_VERSION=5.0
+ARG  DOTNET_VERSION=6.0
 FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION} AS build
 
 COPY src/ /app/

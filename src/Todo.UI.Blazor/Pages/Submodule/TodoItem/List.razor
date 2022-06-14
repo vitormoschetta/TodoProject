@@ -1,0 +1,74 @@
+@page "/submodule/todo"
+@using Todo.UI.Blazor.Models
+@using Todo.UI.Blazor.Components.Icons
+@inject Services.ITodoService _todoService
+@inject NavigationManager _navigationManager
+@inject Helpers.TodoNotification _notification
+
+
+<NavLink href="/submodule/todo/add">
+    <Button Type="@ButtonType.Primary">Novo</Button>
+</NavLink>
+
+<Table TItem="@TodoItem" DataSource="@todos" PageSize="@_pageSize">
+    <RowTemplate>
+        <Column @bind-Field="@context.Id" Sortable />
+        <Column @bind-Field="@context.Title" Sortable />
+        <Column @bind-Field="@context.Done" Sortable />
+        <ActionColumn>
+            <Space>
+                <SpaceItem>
+                    <a href="/submodule/todo/edit/@context.Id">
+                        <IconEdit />
+                    </a>
+                </SpaceItem>
+                <SpaceItem style="margin-left: 1em;">
+                    <Button style="border: none;" @onclick="@(e => ShowDeleteConfirm(context.Id))" id="btnExcluir">
+                        <IconDelete />
+                    </Button>
+                </SpaceItem>
+            </Space>
+        </ActionColumn>
+    </RowTemplate>
+</Table>
+
+
+@code {
+    IEnumerable<Todo.UI.Blazor.Models.TodoItem> todos;
+    int _pageSize = 5;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            (_, todos) = await _todoService.GetAll();
+            var titles = todos.Select(x => x.Done);
+        }
+        catch (Exception ex)
+        {
+            _navigationManager.NavigateTo($"/error/{ex.Message}", false);
+        }
+    }
+
+    private async Task ShowDeleteConfirm(Guid id)
+    {
+        try
+        {
+            var (_, response) = await _todoService.Delete(id);
+
+            if (!response.Success)
+            {
+                _notification.NoticeWithIcon("Erro ao tentar excluir", response.Message, NotificationType.Error);
+                return;
+            }
+
+            _notification.NoticeWithIcon("Excluído com sucesso", string.Empty, NotificationType.Success);
+            todos = todos.Where(x => x.Id != id);
+
+        }
+        catch (Exception ex)
+        {
+            _notification.NoticeWithIcon("Erro ao tentar excluir", ex.Message, NotificationType.Error);
+        }
+    }
+}
