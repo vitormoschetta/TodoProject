@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Todo.Infrastructure.Database.Context;
 
+#nullable disable
+
 namespace Todo.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(AppDbContext))]
@@ -14,10 +16,10 @@ namespace Todo.Infrastructure.Database.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 64)
-                .HasAnnotation("ProductVersion", "5.0.10");
+                .HasAnnotation("ProductVersion", "6.0.6")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("Todo.Domain.Models.TodoItem", b =>
+            modelBuilder.Entity("Todo.Domain.Entities.TodoItem", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -35,7 +37,7 @@ namespace Todo.Infrastructure.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("todo_item");
+                    b.ToTable("todo_item", (string)null);
                 });
 #pragma warning restore 612, 618
         }

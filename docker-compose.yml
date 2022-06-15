@@ -7,12 +7,12 @@ networks:
 
 services:
 
-  app:
-    container_name: todo.app
-    image: vitormoschetta/todo.app
+  ui.blazor:
+    container_name: todo.ui.blazor
+    image: vitormoschetta/todo.ui.blazor
     build:
       context: .
-      dockerfile: infra/docker/Todo.App/Dockerfile    
+      dockerfile: ./infra/docker/Todo.UI.Blazor/Dockerfile
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://*:6002

@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
-using Todo.Domain.Contracts.Repositories;
-using Todo.Domain.Models;
+using Todo.Application.Contracts.Repositories;
+using Todo.Domain.Entities;
 using Todo.Infrastructure.Database.Context;
 
 namespace Todo.Infrastructure.Database.Repositories

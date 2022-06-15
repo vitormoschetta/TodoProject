@@ -66,5 +66,5 @@ Informar username e password.
 
 #### Executar Container
 ```
-docker run -d --name todo.app --restart=always -e API_URL_CONNECTION=http://<ip_publico_ec2_api>/api/ -p 80:6002 --log-opt max-size=100m --log-opt max-file=50 vitormoschetta/todo.app:latest
+docker run -d --name todo.ui.blazor --restart=always -e API_URL_CONNECTION=http://<ip_publico_ec2_api>/api/ -p 80:6002 --log-opt max-size=100m --log-opt max-file=50 vitormoschetta/todo.ui.blazor:latest
 ```

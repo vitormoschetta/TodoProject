@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using RabbitMQ.Client;
-using Todo.Domain.Contracts.Services;
+using Todo.Application.Contracts.Services;
 
 namespace Todo.Infrastructure.Services
 {

@@ -1,7 +1,4 @@
-using System;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Todo.Infrastructure.Database.Context;
 
 namespace Todo.Api.Configurations

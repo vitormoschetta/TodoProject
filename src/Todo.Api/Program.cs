@@ -1,20 +1,23 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Todo.Api;
+using Todo.Infrastructure.Database.Context;
 
-namespace Todo.Api
+var builder = WebApplication.CreateBuilder(args);
+
+var startup = new Startup(builder.Configuration);
+startup.ConfigureServices(builder.Services);
+
+var app = builder.Build();
+app.MapControllers();
+
+startup.Configure(app, app.Environment);
+
+// Apply Migrations
+using (var scope = app.Services.CreateScope())
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-    }
+    var dataContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    if (dataContext.Database.IsRelational() && dataContext.Database.GetPendingMigrations().Any())
+        dataContext.Database.Migrate();
 }
+
+app.Run();

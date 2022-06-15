@@ -1,6 +1,6 @@
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using Todo.Domain.Models;
-using Todo.Infrastructure.Database.Configurations;
+using Todo.Domain.Entities;
 
 namespace Todo.Infrastructure.Database.Context
 {
@@ -13,7 +13,7 @@ namespace Todo.Infrastructure.Database.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new TodoItemConfig());
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
 }
