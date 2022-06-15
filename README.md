@@ -2,10 +2,10 @@
 
 ## Quick start App
 ```
-docker-compose up -d --build app
+docker-compose up -d --build ui.blazor
 ```
 
-Access `Todo.App`: <http://0.0.0.0:6002/>
+Access `Todo.UI.Blazor`: <http://0.0.0.0:6002/>
 
 Access `Todo.Api`: <http://0.0.0.0:6001/>
 

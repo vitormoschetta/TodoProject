@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using Todo.Domain.Contracts.Repositories;
+using Todo.Application.Contracts.Repositories;
 using Todo.Infrastructure.Database.Context;
 
 namespace Todo.Infrastructure.Database.Repositories

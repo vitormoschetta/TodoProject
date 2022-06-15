@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Todo.Domain.Commands.Responses;
-using Todo.Domain.Enums;
+using Todo.Application.Commands.Responses;
+using Todo.Application.Enums;
 
 namespace Todo.Api.Controllers
 {
@@ -11,15 +11,15 @@ namespace Todo.Api.Controllers
         }
 
         [NonAction]
-        protected ActionResult CustomResponse(CommandResponse commandResponse)
+        protected ActionResult StatusCodeResponse(GenericResponse genericResponse)
         {
-            return commandResponse.OutputType switch
+            return genericResponse.StatusResponse switch
             {
-                EOutputType.Success => Ok(commandResponse),
-                EOutputType.InvalidInput => BadRequest(commandResponse),
-                EOutputType.BusinessValidation => BadRequest(commandResponse),
-                EOutputType.NotFound => NotFound(commandResponse),                
-                _ => StatusCode(500, commandResponse.Message),
+                EStatusResponse.Ok => Ok(genericResponse),
+                EStatusResponse.BadRequest => BadRequest(genericResponse),
+                EStatusResponse.NotFound => NotFound(genericResponse),
+                EStatusResponse.InternalServerError => StatusCode(500, genericResponse),
+                _ => StatusCode(500, genericResponse)
             };
         }
     }
