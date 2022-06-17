@@ -39,7 +39,6 @@ services:
       DatabaseConnection__Database: ${DatabaseConnection__Database}
       RabbitMQ__Host: ${RabbitMQ__Host}
       RabbitMQ__Queue: ${RabbitMQ__Queue}
-      Elasticsearch__Uri: ${Elasticsearch__Uri}      
       # ASPNETCORE_Kestrel__Certificates__Default__Password: ${ASPNETCORE_Kestrel__Certificates__Default__Password}
       # ASPNETCORE_Kestrel__Certificates__Default__Path: ${ASPNETCORE_Kestrel__Certificates__Default__Path}    
     ports:
