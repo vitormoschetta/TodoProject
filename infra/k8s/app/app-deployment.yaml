@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: todo-app
-        image: vitormoschetta/todo.app:latest
+        image: vitormoschetta/todo.ui.blazor:latest
         resources:
           limits:
             memory: "128Mi"
