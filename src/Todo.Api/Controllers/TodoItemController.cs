@@ -68,7 +68,7 @@ namespace Todo.Api.Controllers
         }
 
         [HttpGet("GetByTitle/{title}")]
-        public async Task<ActionResult<TodoItemResponse>> GetByTitle(string title)
+        public async Task<IEnumerable<TodoItemResponse>> GetByTitle(string title)
         {
             return await _queryHandler.Get(x => x.Title == title);
         }

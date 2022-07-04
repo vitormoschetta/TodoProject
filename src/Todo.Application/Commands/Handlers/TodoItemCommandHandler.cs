@@ -16,12 +16,14 @@ namespace Todo.Application.Commands.Handlers
         private readonly IUnitOfWork _uow;
         private readonly ILogger _logger;
         private readonly IMessageService _messageService;
+        private readonly ITodoItemNoSqlRepository _todoItemNoSqlRepository;
 
-        public TodoItemCommandHandler(IUnitOfWork uow, IMessageService messageService, ILogger<TodoItemCommandHandler> logger)
+        public TodoItemCommandHandler(IUnitOfWork uow, IMessageService messageService, ILogger<TodoItemCommandHandler> logger, ITodoItemNoSqlRepository todoItemNoSqlRepository)
         {
             _uow = uow;
             _logger = logger;
             _messageService = messageService;
+            _todoItemNoSqlRepository = todoItemNoSqlRepository;
         }
 
         public async Task<GenericResponse> Handle(CreateTodoItemRequest request)
@@ -46,6 +48,11 @@ namespace Todo.Application.Commands.Handlers
 
             await _uow.TodoItem.Add(todoItem);
             await _uow.Commit();
+
+            // TODO: Adicionar Eventos de domínio para lidar com gravação no banco NoSQL e envio de mensagens
+
+            // Gravando em banco de dados NoSQL
+            _todoItemNoSqlRepository.CreateAsync(todoItem);
 
             var message = SerializationManager.SerializeDomainEventToJson(EMessageType.Created, todoItem);
 
@@ -79,6 +86,8 @@ namespace Todo.Application.Commands.Handlers
             await _uow.TodoItem.Update(todoItem);
             await _uow.Commit();
 
+            _todoItemNoSqlRepository.UpdateAsync(todoItem.Id.ToString(), todoItem);
+
             var message = SerializationManager.SerializeDomainEventToJson(EMessageType.Updated, todoItem);
 
             _messageService.SendMessage(message);
@@ -106,6 +115,8 @@ namespace Todo.Application.Commands.Handlers
 
             await _uow.TodoItem.Delete(todoItem);
             await _uow.Commit();
+
+            _todoItemNoSqlRepository.RemoveAsync(todoItem.Id.ToString());
 
             var message = SerializationManager.SerializeDomainEventToJson(EMessageType.Deleted, todoItem);
 

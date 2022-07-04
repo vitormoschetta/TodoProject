@@ -16,6 +16,7 @@ namespace Todo.Application.Test.Tests.Commands.Handlers
         private readonly IMessageService _messageService;
         private readonly ILogger<TodoItemCommandHandler> _logger;
         private readonly ITodoItemCommandHandler _handler;
+        private readonly ITodoItemNoSqlRepository _todoItemNoSqlRepository;
         private CreateTodoItemRequest createCommandNotInstantiated;
         private DeleteTodoItemRequest deleteCommandNotInstantiated;
         private UpdateTodoItemRequest updateCommandNotInstantiated;
@@ -27,7 +28,8 @@ namespace Todo.Application.Test.Tests.Commands.Handlers
             _uow = new UnitOfWorkFake(_repository);
             _logger = new Logger<TodoItemCommandHandler>(new LoggerFactory());
             _messageService = new MessageServiceFake();
-            _handler = new TodoItemCommandHandler(_uow, _messageService, _logger);
+            _todoItemNoSqlRepository = new TodoItemNoSqlRepositoryFake();
+            _handler = new TodoItemCommandHandler(_uow, _messageService, _logger, _todoItemNoSqlRepository);
 
             createCommandNotInstantiated = null;
             deleteCommandNotInstantiated = null;

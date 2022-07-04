@@ -9,6 +9,6 @@ namespace Todo.Application.Contracts.Queries.Handlers
     {
         Task<IEnumerable<TodoItemResponse>> GetAll();
         Task<TodoItemResponse> GetById(Guid id);
-        Task<TodoItemResponse> Get(Expression<Func<TodoItem, bool>> predicate);
+        Task<IEnumerable<TodoItemResponse>> Get(Expression<Func<TodoItemResponse, bool>> predicate);
     }
 }

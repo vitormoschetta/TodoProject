@@ -15,6 +15,8 @@ namespace Todo.Api.Configurations
         {
             services.AddScoped<ITodoItemRepository, TodoItemRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddScoped<ITodoItemNoSqlRepository, TodoItemNoSqlRepository>();
         }
 
         public static void AddCommandHandlers(this IServiceCollection services)

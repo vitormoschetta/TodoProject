@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Todo.Api.Test.Helpers;
+using Todo.Application.Contracts.Repositories;
 using Todo.Application.Contracts.Services;
 using Todo.Infrastructure.Database.Context;
 
@@ -31,8 +32,12 @@ namespace Todo.Api.Test.Mocks
                 var messageService = services.SingleOrDefault(
                     d => d.ServiceType == typeof(IMessageService));
 
+                var todoItemRepository = services.SingleOrDefault(
+                    d => d.ServiceType == typeof(ITodoItemRepository));
+
                 services.Remove(databaseService);
                 services.Remove(messageService);
+                services.Remove(todoItemRepository);
 
                 services.AddDbContext<AppDbContext>(options =>
                 {
@@ -40,6 +45,7 @@ namespace Todo.Api.Test.Mocks
                 });
 
                 services.AddSingleton<IMessageService, MessageServiceFake>();
+                services.AddSingleton<ITodoItemNoSqlRepository, TodoItemNoSqlRepositoryFake>();
 
                 var sp = services.BuildServiceProvider();
 

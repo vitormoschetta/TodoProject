@@ -1,7 +1,8 @@
 bin
 obj
-.sonarqube
 StrykerOutput/
 coverage*
+.sonarqube
+.data
 .vscode/
 .vs/

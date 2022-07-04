@@ -1,5 +1,6 @@
 using Todo.Api.Configurations;
 using Todo.Api.Middlewares;
+using Todo.Infrastructure.Database.Models.NoSql;
 
 namespace Todo.Api
 {
@@ -23,6 +24,7 @@ namespace Todo.Api
             services.AddQueryHandlers();
             services.AddServices();
             services.AddDatabase(Configuration);
+            services.Configure<DatabaseNoSqlSettings>(Configuration.GetSection("DatabaseNoSqlConnection"));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
